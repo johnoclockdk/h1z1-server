@@ -32,13 +32,25 @@ import { Zombie } from "../entities/zombie";
 const debug = require("debug")("zonepacketHandlers");
 
 const dev: any = {
-  path: function (server: ZoneServer2016, client: Client, args: Array<string>) {
+  path: function(server: ZoneServer2016, client: Client, args: Array<string>) {
     const characterId = server.generateGuid();
+    const zombiePosition = client.character.state.position;
+    // create nodes for ClientPath
+    const nodes: { node: { position: Float32Array } }[] = [];
+    for (let i = 0; i < 10; i++) {
+      const nodePosition = structuredClone(zombiePosition);
+      nodePosition[0] += i * 2;
+      nodes.push({
+        node: {
+          position: nodePosition,
+        }
+      });
+    }
     const npc = new Zombie(
       characterId,
       server.getTransientId(characterId),
       9510,
-      client.character.state.position,
+      zombiePosition,
       client.character.state.rotation,
       server
     );
@@ -46,11 +58,11 @@ const dev: any = {
     setTimeout(() => {
       server.sendData(client, "ClientPath.Reply", {
         unknownDword2: npc.transientId,
-        nodes: [{ node: client.character.state.position }]
+        nodes
       });
     }, 2000);
   },
-  zombie: function (
+  zombie: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -68,7 +80,7 @@ const dev: any = {
     );
     server._npcs[characterId] = zombie;
   },
-  deletesmallshacks: function (server: ZoneServer2016, client: Client) {
+  deletesmallshacks: function(server: ZoneServer2016, client: Client) {
     let counter = 0;
     for (const a in server._constructionFoundations) {
       const foundation = server._constructionFoundations[a];
@@ -94,7 +106,7 @@ const dev: any = {
     }
     server.sendChatText(client, `Deleted ${counter} small shacks`);
   },
-  zombiemove: function (
+  zombiemove: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -122,33 +134,33 @@ const dev: any = {
       } as CharacterSeekTarget);
     }, 5000);
   },
-  stats: function (
+  stats: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
   ) {
     server.logStats();
   },
-  spam: function (server: ZoneServer2016, client: Client, args: Array<string>) {
+  spam: function(server: ZoneServer2016, client: Client, args: Array<string>) {
     const spamNb = Number(args[1]) || 1;
     for (let i = 0; i < spamNb; i++) {
       server.sendChatText(client, `spam ${i}`);
     }
   },
-  list: function (server: ZoneServer2016, client: Client, args: Array<string>) {
+  list: function(server: ZoneServer2016, client: Client, args: Array<string>) {
     server.sendChatText(
       client,
       `/dev commands list: \n/dev ${Object.keys(this).join("\n/dev ")}`
     );
   },
-  r: function (server: ZoneServer2016, client: Client, args: Array<string>) {
+  r: function(server: ZoneServer2016, client: Client, args: Array<string>) {
     // quick respawn
     server.respawnPlayer(
       client,
       server._spawnGrid[randomIntFromInterval(0, 99)]
     );
   },
-  testpacket: function (
+  testpacket: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -156,7 +168,7 @@ const dev: any = {
     const packetName = args[1];
     server.sendData(client, packetName as h1z1PacketsType2016, {});
   },
-  findmodel: function (
+  findmodel: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -179,14 +191,14 @@ const dev: any = {
       server.sendChatText(client, `missing word filter`);
     }
   },
-  reloadpackets: function (
+  reloadpackets: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
   ) {
     server.reloadPackets(client);
   },
-  systemmessage: function (
+  systemmessage: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -204,7 +216,7 @@ const dev: any = {
     server.sendChatText(client, "Sending system message");
     server.sendData(client, "ShowSystemMessage", msg);
   },
-  setresource: function (
+  setresource: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -234,7 +246,7 @@ const dev: any = {
     server.sendChatText(client, "Setting character resource");
     server.sendData(client, "ResourceEvent", resourceEvent);
   },
-  selectloadout: function (
+  selectloadout: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -248,7 +260,7 @@ const dev: any = {
       loadoutId: Number(args[1])
     });
   },
-  selectslot: function (
+  selectslot: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -263,7 +275,7 @@ const dev: any = {
       loadoutSlotId: Number(args[1])
     });
   },
-  createcustomloadout: function (
+  createcustomloadout: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -280,7 +292,7 @@ const dev: any = {
     server.sendData(client, "Loadout.CreateCustomLoadout", loadout);
   },
 
-  setslot: function (
+  setslot: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -305,7 +317,7 @@ const dev: any = {
       unknownDword1: 18
     });
   },
-  containererror: function (
+  containererror: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -321,7 +333,7 @@ const dev: any = {
 
     server.sendData(client, "Container.Error", container);
   },
-  setequipment: function (
+  setequipment: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -399,7 +411,7 @@ const dev: any = {
     server.sendData(client, "Equipment.SetCharacterEquipmentSlots", equipment);*/
   },
 
-  tpvehicle: function (
+  tpvehicle: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -430,7 +442,7 @@ const dev: any = {
     }
   },
 
-  tpnpc: function (
+  tpnpc: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -460,7 +472,7 @@ const dev: any = {
       server.sendChatText(client, `No npcs of ID: ${args[1]} found`);
     }
   },
-  stat: function (server: ZoneServer2016, client: Client, args: Array<string>) {
+  stat: function(server: ZoneServer2016, client: Client, args: Array<string>) {
     if (!args[3]) {
       server.sendChatText(client, "missing statId, baseValue, modifierValue");
       return;
@@ -477,7 +489,7 @@ const dev: any = {
       }
     });
   },
-  listcontainers: function (
+  listcontainers: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -487,7 +499,7 @@ const dev: any = {
       containers: client.character.pGetContainers(server)
     });
   },
-  shutdown: function (
+  shutdown: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -497,7 +509,7 @@ const dev: any = {
       message: " "
     });
   },
-  fte: function (server: ZoneServer2016, client: Client, args: Array<string>) {
+  fte: function(server: ZoneServer2016, client: Client, args: Array<string>) {
     if (!args[3]) {
       server.sendChatText(client, "Missing 3 args");
       return;
@@ -508,7 +520,7 @@ const dev: any = {
       unknownBoolean1: Boolean(args[3])
     });
   },
-  proximateitems: function (
+  proximateitems: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -555,7 +567,7 @@ const dev: any = {
   },
   /*
     proxiedobjects: function(server: ZoneServer2016, client: Client, args: Array<string>) {
-
+ 
       objects.runtime_object.runtime_objects.forEach((object) => {
         if(object.actor_file === "Common_Props_Dryer.adr") {
           object.instances.forEach((instance) => {
@@ -582,14 +594,14 @@ const dev: any = {
   //endregion
   */
 
-  poi: function (server: ZoneServer2016, client: Client, args: Array<string>) {
+  poi: function(server: ZoneServer2016, client: Client, args: Array<string>) {
     server.sendData(client, "POIChangeMessage", {
       messageStringId: Number(args[1]) || 0,
       id: Number(args[1]) || 0
     });
   },
 
-  vehicleaccess: function (
+  vehicleaccess: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -643,14 +655,14 @@ const dev: any = {
     });
   },
 
-  stop: function (server: ZoneServer2016, client: Client, args: Array<string>) {
+  stop: function(server: ZoneServer2016, client: Client, args: Array<string>) {
     server.sendData(client, "PlayerStop", {
       transientId: client.character.transientId,
       state: true
     });
   },
 
-  group: function (
+  group: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -676,7 +688,7 @@ const dev: any = {
     });
   },
 
-  spectateflag: function (
+  spectateflag: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -694,7 +706,7 @@ const dev: any = {
     }
   },
 
-  vehicledecay: function (
+  vehicledecay: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -703,7 +715,7 @@ const dev: any = {
     server.decayManager.vehicleDecayDamage(server);
   },
 
-  script: function (
+  script: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -714,7 +726,7 @@ const dev: any = {
     });
   },
 
-  print: function (
+  print: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -724,7 +736,7 @@ const dev: any = {
     });
   },
 
-  messagebox: function (
+  messagebox: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -734,7 +746,7 @@ const dev: any = {
       message: "MESSAGE"
     });
   },
-  groupjoin: function (
+  groupjoin: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -761,7 +773,7 @@ const dev: any = {
     });
   },
 
-  shader: function (
+  shader: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -780,7 +792,7 @@ const dev: any = {
       });
     });
   },
-  reloadplugins: async function (
+  reloadplugins: async function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
@@ -792,7 +804,7 @@ const dev: any = {
     server.sendChatText(client, `Loaded ${server.pluginManager.pluginCount}`);
   },
 
-  bounds: function (
+  bounds: function(
     server: ZoneServer2016,
     client: Client,
     args: Array<string>
