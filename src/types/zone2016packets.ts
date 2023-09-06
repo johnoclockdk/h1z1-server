@@ -1147,7 +1147,7 @@ export interface ClientPathRequest {
 }
 export interface ClientPathReply {
   PathProcessingTech?: number;
-  unknownDword2?: number;
+  someUint32Id?: number;
   nodes?: any[];
 }
 export interface FirstTimeEventUnknown1 {

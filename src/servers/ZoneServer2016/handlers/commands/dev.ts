@@ -57,7 +57,7 @@ const dev: any = {
     server.addLightweightNpc(client, npc);
     setTimeout(() => {
       server.sendData(client, "ClientPath.Reply", {
-        unknownDword2: npc.transientId,
+        someUint32Id: npc.transientId,
         nodes
       });
     }, 2000);

@@ -26,7 +26,7 @@ export const clientPathPackets: PacketStructures = [
     {
       fields: [
         { name: "PathProcessingTech", type: "uint32", defaultValue: 0 }, // 1 = Kynapse, for real using an uint32 for this is dumb as fuck DB
-        { name: "unknownDword2", type: "uint32", defaultValue: 6 },
+        { name: "someUint32Id", type: "uint32", defaultValue: 6 },
         {
           name: "nodes",
           type: "array",
