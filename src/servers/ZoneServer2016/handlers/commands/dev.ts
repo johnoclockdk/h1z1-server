@@ -26,8 +26,9 @@ import { Items } from "../../models/enums";
 import { LootableConstructionEntity } from "../../entities/lootableconstructionentity";
 import { ConstructionChildEntity } from "../../entities/constructionchildentity";
 import { ConstructionDoor } from "../../entities/constructiondoor";
-import { randomIntFromInterval } from "../../../../utils/utils";
+import { Scheduler, randomIntFromInterval } from "../../../../utils/utils";
 import { Zombie } from "../../entities/zombie";
+import { Character2016 } from "../../entities/character";
 
 const debug = require("debug")("zonepacketHandlers");
 
@@ -62,6 +63,36 @@ const dev: any = {
       });
     }, 2000);
   },
+  pathreplay: function(server: ZoneServer2016, client: Client, args: Array<string>) {
+    const zombiePosition = client.character.state.position;
+    const characterId = server.generateGuid();
+    const npc = new Zombie(
+      characterId,
+      server.getTransientId(characterId),
+      9510,
+      zombiePosition,
+      client.character.state.rotation,
+      server
+    );
+    server.addLightweightNpc(client, npc);
+    setTimeout(async () => {
+      const moves = await server._db.collection("moves").find({}).toArray();
+      for (let index = 0; index < moves.length; index++) {
+        const move = moves[index];
+        const moveData = Buffer.from(move.raw.toString(), "binary")
+        const data =
+          server._protocol.createPositionBroadcast2016(
+            moveData,
+            npc.transientId
+          )
+        console.log(data)
+        server.sendRawData(client, data)
+        await Scheduler.wait(30)
+
+      }
+    }, 2000);
+  },
+
   zombie: function(
     server: ZoneServer2016,
     client: Client,
@@ -69,16 +100,16 @@ const dev: any = {
   ) {
     // spawn a zombie
     const characterId = server.generateGuid();
-    const transient = server.getTransientId(characterId);
-    const zombie = new Npc(
+    const transient = 20030;
+    const zombie = new Character2016(
       characterId,
       transient,
-      9510,
-      client.character.state.position,
-      client.character.state.rotation,
       server
     );
-    server._npcs[characterId] = zombie;
+    zombie.state.position = client.character.state.position;
+    zombie.state.rotation = client.character.state.rotation;
+    zombie.actorModelId = 9510;
+    server._characters[characterId] = zombie;
   },
   deletesmallshacks: function(server: ZoneServer2016, client: Client) {
     let counter = 0;
@@ -124,15 +155,35 @@ const dev: any = {
     );
     server._npcs[characterId] = zombie;
     setTimeout(() => {
+      // server.sendData(client, "Character.MovementVersion", {
+      //   characterId: zombie.characterId,
+      //   version: 3
+      // });
+      //
+      server.sendData(
+        client,
+        "LightweightToFullNpc",
+        zombie.pGetFull(server))
+      server.sendData(client, "Character.SeekTarget", {
+        characterId: zombie.characterId,
+        TargetCharacterId: client.character.characterId,
+        initSpeed: 1,
+        acceleration: 0,
+        speed: 69,
+        turn: 2,
+        yRot: 0,
+        rotation: new Float32Array([
+          0,
+          0,
+          0,
+          0
+        ])
+      });
       server.sendData(client, "Character.ManagedObject", {
         characterId: client.character.characterId,
         objectCharacterId: characterId
       } as CharacterManagedObject);
-      server.sendData(client, "Character.SeekTarget", {
-        characterId,
-        TargetCharacterId: client.character.characterId
-      } as CharacterSeekTarget);
-    }, 5000);
+    }, 2000);
   },
   stats: function(
     server: ZoneServer2016,
