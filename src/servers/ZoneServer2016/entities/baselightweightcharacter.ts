@@ -16,6 +16,10 @@ import { ZoneServer2016 } from "../zoneserver";
 import { BaseEntity } from "./baseentity";
 
 function getHeadActor(modelId: number): string {
+    if(typeof modelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/baselightweightcharacter.ts=>getHeadActor] modelId isn't of type number but of type ${typeof modelId}`);
+    }
+    
   switch (modelId) {
     case 9240:
       return "SurvivorMale_Head_01.adr";

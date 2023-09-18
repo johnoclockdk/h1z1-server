@@ -19,6 +19,10 @@ import { containerLootSpawners } from "../data/lootspawns";
 import { getRandomItem } from "../managers/worldobjectmanager";
 
 function getActorModelId(actorModel: string): number {
+    if(typeof actorModel !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/entities/crate.ts=>getActorModelId] actorModel isn't of type string but of type ${typeof actorModel}`);
+    }
+    
   switch (actorModel) {
     case "Common_Props_Crate_Long01.adr":
       return 8014;
@@ -33,6 +37,10 @@ function getActorModelId(actorModel: string): number {
 }
 
 function isBuffedCrate(position: Float32Array): boolean {
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/entities/crate.ts=>isBuffedCrate] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
   const buffedPostions: [number, number, number, number][] = [
     [1814.5, 48.88, 224.07, 1],
     [2043.44, 46.28, 423.75, 1],
@@ -148,6 +156,10 @@ export class Crate extends BaseLightweightCharacter {
     isInstant?: boolean
     /* eslint-enable @typescript-eslint/no-unused-vars */
   ) {
+    if(typeof isInstant !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/entities/crate.ts=>OnPlayerSelect] isInstant isn't of type boolean but of type ${typeof isInstant}`);
+    }
+    
     this.destroy(server);
   }
 }

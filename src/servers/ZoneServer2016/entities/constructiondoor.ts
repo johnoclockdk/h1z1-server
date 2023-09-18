@@ -20,6 +20,10 @@ import { getConstructionSlotId, movePoint } from "../../../utils/utils";
 import { ConstructionParentEntity } from "./constructionparententity";
 import { ConstructionChildEntity } from "./constructionchildentity";
 function getDamageRange(definitionId: number): number {
+    if(typeof definitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructiondoor.ts=>getDamageRange] definitionId isn't of type number but of type ${typeof definitionId}`);
+    }
+    
   switch (definitionId) {
     case Items.METAL_GATE:
       return 4.3;
@@ -171,6 +175,10 @@ export class ConstructionDoor extends DoorEntity {
     characterId: string,
     permission: ConstructionPermissionIds
   ) {
+    if(typeof characterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructiondoor.ts=>getHasPermission] characterId isn't of type string but of type ${typeof characterId}`);
+    }
+    
     return (
       this.getParentFoundation(server)?.getHasPermission(
         server,
@@ -190,6 +198,10 @@ export class ConstructionDoor extends DoorEntity {
     client: ZoneClient2016,
     isInstant?: boolean
   ) {
+    if(typeof isInstant !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructiondoor.ts=>OnPlayerSelect] isInstant isn't of type boolean but of type ${typeof isInstant}`);
+    }
+    
     if (this.canUndoPlacement(server, client)) {
       this.destroy(server);
       client.character.lootItem(

@@ -70,6 +70,10 @@ export class SOEServer extends EventEmitter {
   }
 
   getSoeClient(soeClientId: string): SOEClient | undefined {
+    if(typeof soeClientId !== 'string'){
+    console.warn(`[src/servers/SoeServer/soeserver.ts=>getSoeClient] soeClientId isn't of type string but of type ${typeof soeClientId}`);
+    }
+    
     return this._clients.get(soeClientId);
   }
 
@@ -80,6 +84,10 @@ export class SOEServer extends EventEmitter {
   }
 
   private _sendPhysicalPacket(client: Client, packet: Uint8Array): void {
+    if(!(packet instanceof Uint8Array)){
+    console.warn(`[src/servers/SoeServer/soeserver.ts=>_sendPhysicalPacket] packet isn't of type Uint8Array but of type ${typeof packet}`);
+    }
+    
     client.packetsSentThisSec++;
     client.stats.totalPacketSent++;
     this._connection.postMessage({
@@ -219,6 +227,10 @@ export class SOEServer extends EventEmitter {
   }
 
   private _createClient(clientId: string, remote: RemoteInfo) {
+    if(typeof clientId !== 'string'){
+    console.warn(`[src/servers/SoeServer/soeserver.ts=>_createClient] clientId isn't of type string but of type ${typeof clientId}`);
+    }
+    
     const client = new SOEClient(remote, this._crcSeed, this._cryptoKey);
     this._clients.set(clientId, client);
     return client;
@@ -321,6 +333,10 @@ export class SOEServer extends EventEmitter {
   }
 
   start(crcLength?: crc_length_options, udpLength?: number): void {
+    if(typeof udpLength !== 'number'){
+    console.warn(`[src/servers/SoeServer/soeserver.ts=>start] udpLength isn't of type number but of type ${typeof udpLength}`);
+    }
+    
     if (crcLength !== undefined) {
       this._crcLength = crcLength;
     }
@@ -441,6 +457,10 @@ export class SOEServer extends EventEmitter {
   }
 
   private packLogicalData(packetName: string, packet: json): Buffer {
+    if(typeof packetName !== 'string'){
+    console.warn(`[src/servers/SoeServer/soeserver.ts=>packLogicalData] packetName isn't of type string but of type ${typeof packetName}`);
+    }
+    
     let logicalData;
     switch (packetName) {
       case "SessionRequest":
@@ -489,6 +509,10 @@ export class SOEServer extends EventEmitter {
   }
   // Build the logical packet via the soeprotocol
   private createLogicalPacket(packetName: string, packet: json): LogicalPacket {
+    if(typeof packetName !== 'string'){
+    console.warn(`[src/servers/SoeServer/soeserver.ts=>createLogicalPacket] packetName isn't of type string but of type ${typeof packetName}`);
+    }
+    
     try {
       const logicalPacket = new LogicalPacket(
         this.packLogicalData(packetName, packet),
@@ -551,6 +575,10 @@ export class SOEServer extends EventEmitter {
     packet: json,
     unbuffered = false
   ): void {
+    if(typeof packetName !== 'string'){
+    console.warn(`[src/servers/SoeServer/soeserver.ts=>_sendLogicalPacket] packetName isn't of type string but of type ${typeof packetName}`);
+    }
+    
     const logicalPacket = this.createLogicalPacket(packetName, packet);
     if (
       !unbuffered &&
@@ -568,6 +596,10 @@ export class SOEServer extends EventEmitter {
 
   // Called by the application to send data to a client
   sendAppData(client: Client, data: Uint8Array): void {
+    if(!(data instanceof Uint8Array)){
+    console.warn(`[src/servers/SoeServer/soeserver.ts=>sendAppData] data isn't of type Uint8Array but of type ${typeof data}`);
+    }
+    
     if (client.outputStream.isUsingEncryption()) {
       debug("Sending app data: " + data.length + " bytes with encryption");
     } else {
@@ -577,6 +609,10 @@ export class SOEServer extends EventEmitter {
   }
 
   sendUnbufferedAppData(client: Client, data: Uint8Array): void {
+    if(!(data instanceof Uint8Array)){
+    console.warn(`[src/servers/SoeServer/soeserver.ts=>sendUnbufferedAppData] data isn't of type Uint8Array but of type ${typeof data}`);
+    }
+    
     if (client.outputStream.isUsingEncryption()) {
       debug(
         "Sending unbuffered app data: " + data.length + " bytes with encryption"
@@ -588,6 +624,10 @@ export class SOEServer extends EventEmitter {
   }
 
   setEncryption(client: Client, value: boolean): void {
+    if(typeof value !== 'boolean'){
+    console.warn(`[src/servers/SoeServer/soeserver.ts=>setEncryption] value isn't of type boolean but of type ${typeof value}`);
+    }
+    
     client.outputStream.setEncryption(value);
     client.inputStream.setEncryption(value);
   }

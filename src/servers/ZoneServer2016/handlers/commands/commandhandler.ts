@@ -109,6 +109,10 @@ export class CommandHandler {
     commandName: string,
     packet: any
   ) {
+    if(typeof commandName !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/handlers/commands/commandhandler.ts=>executeInternalCommand] commandName isn't of type string but of type ${typeof commandName}`);
+    }
+    
     if (
       !server.hookManager.checkHook(
         "OnClientExecuteInternalCommand",

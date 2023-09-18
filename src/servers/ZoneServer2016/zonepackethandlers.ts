@@ -77,6 +77,10 @@ import { Destroyable } from "./entities/destroyable";
 import { Lootbag } from "./entities/lootbag";
 
 function getStanceFlags(num: number): StanceFlags {
+    if(typeof num !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/zonepackethandlers.ts=>getStanceFlags] num isn't of type number but of type ${typeof num}`);
+    }
+    
   function getBit(bin: string, bit: number) {
     return bin.charAt(bit) === "1";
   }

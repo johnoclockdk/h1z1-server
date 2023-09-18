@@ -21,6 +21,10 @@ import { generateRandomGuid } from "../../../utils/utils";
 import { ZoneClient } from "./zoneclient";
 
 function getVehicleId(ModelId: number): number {
+    if(typeof ModelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/classes/vehicle.ts=>getVehicleId] ModelId isn't of type number but of type ${typeof ModelId}`);
+    }
+    
   switch (ModelId) {
     case 7225:
       return 1;
@@ -38,6 +42,10 @@ function getVehicleId(ModelId: number): number {
 }
 
 function getVehicleType(ModelId: number): string {
+    if(typeof ModelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/classes/vehicle.ts=>getVehicleType] ModelId isn't of type number but of type ${typeof ModelId}`);
+    }
+    
   switch (ModelId) {
     case 7225:
       return "offroader";

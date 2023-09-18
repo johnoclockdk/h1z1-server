@@ -71,6 +71,10 @@ export class ItemObject extends BaseLightweightCharacter {
     isInstant?: boolean
     /* eslint-enable @typescript-eslint/no-unused-vars */
   ) {
+    if(typeof isInstant !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/entities/itemobject.ts=>OnPlayerSelect] isInstant isn't of type boolean but of type ${typeof isInstant}`);
+    }
+    
     server.pickupItem(client, this.characterId);
   }
 

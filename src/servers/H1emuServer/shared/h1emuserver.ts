@@ -42,6 +42,10 @@ export abstract class H1emuServer extends EventEmitter {
   }
 
   clientHandler(remote: RemoteInfo, opcode: number): H1emuClient | void {
+    if(typeof opcode !== 'number'){
+    console.warn(`[src/servers/H1emuServer/shared/h1emuserver.ts=>clientHandler] opcode isn't of type number but of type ${typeof opcode}`);
+    }
+    
     let client: H1emuClient;
     const clientId: string = `${remote.address}:${remote.port}`;
     if (!this._clients[clientId]) {
@@ -57,6 +61,10 @@ export abstract class H1emuServer extends EventEmitter {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   messageHandler(messageType: string, data: Buffer, client: H1emuClient): void {
+    if(typeof messageType !== 'string'){
+    console.warn(`[src/servers/H1emuServer/shared/h1emuserver.ts=>messageHandler] messageType isn't of type string but of type ${typeof messageType}`);
+    }
+    
     throw new Error("You need to implement messageHandler !");
   }
 
@@ -109,6 +117,10 @@ export abstract class H1emuServer extends EventEmitter {
   }
 
   updateClientLastPing(clientId: string) {
+    if(typeof clientId !== 'string'){
+    console.warn(`[src/servers/H1emuServer/shared/h1emuserver.ts=>updateClientLastPing] clientId isn't of type string but of type ${typeof clientId}`);
+    }
+    
     this._clients[clientId].lastPing = Date.now();
   }
 }

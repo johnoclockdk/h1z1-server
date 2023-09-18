@@ -29,6 +29,10 @@ export class TemporaryEntity extends BaseSimpleNpc {
   }
 
   setDespawnTimer(server: ZoneServer2016, time: number) {
+    if(typeof time !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/temporaryentity.ts=>setDespawnTimer] time isn't of type number but of type ${typeof time}`);
+    }
+    
     if (this.disappearTimer) this.disappearTimer.refresh();
     this.disappearTimer = setTimeout(() => {
       server.deleteEntity(this.characterId, server._temporaryObjects);

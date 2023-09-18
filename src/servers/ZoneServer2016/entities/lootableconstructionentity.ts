@@ -139,6 +139,10 @@ export class LootableConstructionEntity extends BaseLootableEntity {
     characterId: string,
     permission: ConstructionPermissionIds
   ) {
+    if(typeof characterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/entities/lootableconstructionentity.ts=>getHasPermission] characterId isn't of type string but of type ${typeof characterId}`);
+    }
+    
     return (
       this.getParentFoundation(server)?.getHasPermission(
         server,
@@ -154,6 +158,10 @@ export class LootableConstructionEntity extends BaseLootableEntity {
     isInstant?: boolean
     /* eslint-enable @typescript-eslint/no-unused-vars */
   ) {
+    if(typeof isInstant !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/entities/lootableconstructionentity.ts=>OnPlayerSelect] isInstant isn't of type boolean but of type ${typeof isInstant}`);
+    }
+    
     if (this.canUndoPlacement(server, client)) {
       this.destroy(server);
       client.character.lootItem(

@@ -37,6 +37,10 @@ import {
 } from "../data/constructionslots";
 
 function getDamageRange(definitionId: number): number {
+    if(typeof definitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionparententity.ts=>getDamageRange] definitionId isn't of type number but of type ${typeof definitionId}`);
+    }
+    
   switch (definitionId) {
     case Items.SHACK:
       return 4.5;
@@ -196,6 +200,10 @@ export class ConstructionParentEntity extends ConstructionChildEntity {
   }
 
   getAdjustedShelterSlotId(buildingSlot: string) {
+    if(typeof buildingSlot !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionparententity.ts=>getAdjustedShelterSlotId] buildingSlot isn't of type string but of type ${typeof buildingSlot}`);
+    }
+    
     let slot = getConstructionSlotId(buildingSlot);
     if (this.itemDefinitionId == Items.GROUND_TAMPER) {
       switch (true) {
@@ -276,6 +284,10 @@ export class ConstructionParentEntity extends ConstructionChildEntity {
    * @param expansion The expansion to check.
    */
   getDependentExpansion(slotId: number): number {
+    if(typeof slotId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionparententity.ts=>getDependentExpansion] slotId isn't of type number but of type ${typeof slotId}`);
+    }
+    
     switch (slotId) {
       case 4:
       case 5:
@@ -298,6 +310,10 @@ export class ConstructionParentEntity extends ConstructionChildEntity {
   }
 
   isSideSecure(side: number): boolean {
+    if(typeof side !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionparententity.ts=>isSideSecure] side isn't of type number but of type ${typeof side}`);
+    }
+    
     if (this.itemDefinitionId != Items.FOUNDATION) return false;
     let secure = true;
     Object.keys(this.wallSlots).forEach((slot) => {
@@ -609,6 +625,10 @@ export class ConstructionParentEntity extends ConstructionChildEntity {
     buildingSlot: number | string,
     itemDefinitionId: number
   ) {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionparententity.ts=>isExpansionSlotValid] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
     let slot = 0;
     if (typeof buildingSlot == "string") {
       slot = getConstructionSlotId(buildingSlot);
@@ -631,6 +651,10 @@ export class ConstructionParentEntity extends ConstructionChildEntity {
   }
 
   isRampSlotValid(buildingSlot: number | string, itemDefinitionId: number) {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionparententity.ts=>isRampSlotValid] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
     let slot = 0;
     if (typeof buildingSlot == "string") {
       slot = getConstructionSlotId(buildingSlot);
@@ -653,6 +677,10 @@ export class ConstructionParentEntity extends ConstructionChildEntity {
   }
 
   isInside(position: Float32Array) {
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionparententity.ts=>isInside] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
     switch (this.itemDefinitionId) {
       case Items.FOUNDATION:
       case Items.FOUNDATION_EXPANSION:
@@ -705,6 +733,10 @@ export class ConstructionParentEntity extends ConstructionChildEntity {
   }
 
   isUnder(position: Float32Array) {
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionparententity.ts=>isUnder] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
     if (!this.bounds) {
       console.error(
         `ERROR: CONSTRUCTION BOUNDS IS NOT DEFINED FOR ${this.itemDefinitionId} ${this.characterId}`
@@ -786,6 +818,10 @@ export class ConstructionParentEntity extends ConstructionChildEntity {
     characterId: string,
     permission: ConstructionPermissionIds
   ) {
+    if(typeof characterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionparententity.ts=>getHasPermission] characterId isn't of type string but of type ${typeof characterId}`);
+    }
+    
     if (characterId == this.ownerCharacterId) return true;
     switch (permission) {
       case ConstructionPermissionIds.BUILD:
@@ -805,6 +841,10 @@ export class ConstructionParentEntity extends ConstructionChildEntity {
     isInstant?: boolean
     /* eslint-enable @typescript-eslint/no-unused-vars */
   ) {
+    if(typeof isInstant !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionparententity.ts=>OnPlayerSelect] isInstant isn't of type boolean but of type ${typeof isInstant}`);
+    }
+    
     if (this.canUndoPlacement(server, client)) {
       this.destroy(server);
       client.character.lootItem(

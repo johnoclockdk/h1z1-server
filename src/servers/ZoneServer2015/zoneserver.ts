@@ -391,6 +391,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   generateTransientId(characterId: string): number {
+    if(typeof characterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>generateTransientId] characterId isn't of type string but of type ${typeof characterId}`);
+    }
+    
     let generatedTransient;
     do {
       generatedTransient = Number((Math.random() * 30000).toFixed(0));
@@ -406,6 +410,26 @@ export class ZoneServer2015 extends EventEmitter {
     characterId: string,
     generatedTransient: number
   ) {
+    if(typeof sessionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>createClient] sessionId isn't of type number but of type ${typeof sessionId}`);
+    }
+    
+    if(typeof soeClientId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>createClient] soeClientId isn't of type string but of type ${typeof soeClientId}`);
+    }
+    
+    if(typeof loginSessionId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>createClient] loginSessionId isn't of type string but of type ${typeof loginSessionId}`);
+    }
+    
+    if(typeof characterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>createClient] characterId isn't of type string but of type ${typeof characterId}`);
+    }
+    
+    if(typeof generatedTransient !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>createClient] generatedTransient isn't of type number but of type ${typeof generatedTransient}`);
+    }
+    
     return new Client(
       sessionId,
       soeClientId,
@@ -421,6 +445,18 @@ export class ZoneServer2015 extends EventEmitter {
     loginSessionId: string,
     clientProtocol: string
   ) {
+    if(typeof characterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>onGatewayLoginEvent] characterId isn't of type string but of type ${typeof characterId}`);
+    }
+    
+    if(typeof loginSessionId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>onGatewayLoginEvent] loginSessionId isn't of type string but of type ${typeof loginSessionId}`);
+    }
+    
+    if(typeof clientProtocol !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>onGatewayLoginEvent] clientProtocol isn't of type string but of type ${typeof clientProtocol}`);
+    }
+    
     if (clientProtocol !== this._clientProtocol) {
       debug(`${soeClient.address} is using the wrong client protocol`);
       this.sendData(soeClient as any, "LoginFailed", {});
@@ -448,10 +484,18 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   onGatewayDisconnectEvent(err: string, client: Client) {
+    if(typeof err !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>onGatewayDisconnectEvent] err isn't of type string but of type ${typeof err}`);
+    }
+    
     this.deleteClient(client);
   }
 
   getSoeClient(soeClientId: string): SOEClient | undefined {
+    if(typeof soeClientId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>getSoeClient] soeClientId isn't of type string but of type ${typeof soeClientId}`);
+    }
+    
     return this._gatewayServer._soeServer.getSoeClient(soeClientId);
   }
 
@@ -477,6 +521,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   onGatewayTunnelDataEvent(client: Client, data: Buffer, flags: number) {
+    if(typeof flags !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>onGatewayTunnelDataEvent] flags isn't of type number but of type ${typeof flags}`);
+    }
+    
     const packet = this._protocol.parse(data, flags);
     if (packet) {
       this.emit("data", client, packet);
@@ -543,6 +591,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   getEntityType(entityKey: string): number {
+    if(typeof entityKey !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>getEntityType] entityKey isn't of type string but of type ${typeof entityKey}`);
+    }
+    
     if (!!this._npcs[entityKey]) {
       return 1;
     } else if (!!this._vehicles[entityKey]) {
@@ -559,6 +611,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   getCollisionEntityType(entityKey: string): number {
+    if(typeof entityKey !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>getCollisionEntityType] entityKey isn't of type string but of type ${typeof entityKey}`);
+    }
+    
     return !!this._destroyables[entityKey] ? 1 : 2;
   }
 
@@ -1118,6 +1174,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   setGodMode(client: Client, godMode: boolean) {
+    if(typeof godMode !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>setGodMode] godMode isn't of type boolean but of type ${typeof godMode}`);
+    }
+    
     client.character.godMode = godMode;
     client.character.characterStates.invincibility = godMode;
     this.sendChatText(
@@ -1144,6 +1204,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   tempGodMode(client: Client, durationMs: number) {
+    if(typeof durationMs !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>tempGodMode] durationMs isn't of type number but of type ${typeof durationMs}`);
+    }
+    
     if (!client.character.godMode) {
       client.character.godMode = true;
       setTimeout(() => {
@@ -1216,6 +1280,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   playerDamage(client: Client, damage: number) {
+    if(typeof damage !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>playerDamage] damage isn't of type number but of type ${typeof damage}`);
+    }
+    
     const character = client.character;
     if (
       !client.character.godMode &&
@@ -1320,6 +1388,14 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   explosionDamage(position: Float32Array, npcTriggered: string) {
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>explosionDamage] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(typeof npcTriggered !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>explosionDamage] npcTriggered isn't of type string but of type ${typeof npcTriggered}`);
+    }
+    
     for (const character in this._clients) {
       const characterObj = this._clients[character];
       if (!characterObj.character.godMode) {
@@ -1349,6 +1425,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   damageVehicle(damage: number, vehicle: Vehicle, loopDamageMs = 0) {
+    if(typeof damage !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>damageVehicle] damage isn't of type number but of type ${typeof damage}`);
+    }
+    
     if (!vehicle.isInvulnerable) {
       let destroyedVehicleEffect: number;
       let destroyedVehicleModel: number;
@@ -1573,6 +1653,22 @@ export class ZoneServer2015 extends EventEmitter {
     resource: number,
     resourceType: number
   ) {
+    if(typeof entityId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>updateResource] entityId isn't of type string but of type ${typeof entityId}`);
+    }
+    
+    if(typeof value !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>updateResource] value isn't of type number but of type ${typeof value}`);
+    }
+    
+    if(typeof resource !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>updateResource] resource isn't of type number but of type ${typeof resource}`);
+    }
+    
+    if(typeof resourceType !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>updateResource] resourceType isn't of type number but of type ${typeof resourceType}`);
+    }
+    
     this.sendData(client, "ResourceEvent", {
       eventData: {
         type: 3,
@@ -1594,6 +1690,14 @@ export class ZoneServer2015 extends EventEmitter {
     object: any,
     sendToAll: boolean
   ) {
+    if(typeof characterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>updateCharacterState] characterId isn't of type string but of type ${typeof characterId}`);
+    }
+    
+    if(typeof sendToAll !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>updateCharacterState] sendToAll isn't of type boolean but of type ${typeof sendToAll}`);
+    }
+    
     const updateCharacterStateBody = {
       characterId: characterId,
       states1: object,
@@ -1620,6 +1724,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   turnOnEngine(vehicleGuid: string) {
+    if(typeof vehicleGuid !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>turnOnEngine] vehicleGuid isn't of type string but of type ${typeof vehicleGuid}`);
+    }
+    
     if (this._vehicles[vehicleGuid].npcData.resources.fuel > 0) {
       this.sendDataToAll("Vehicle.Engine", {
         guid2: vehicleGuid,
@@ -1682,6 +1790,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   turnOffEngine(vehicleGuid: string) {
+    if(typeof vehicleGuid !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>turnOffEngine] vehicleGuid isn't of type string but of type ${typeof vehicleGuid}`);
+    }
+    
     this._vehicles[vehicleGuid].engineOn = false;
     this.sendDataToAll("Vehicle.Engine", {
       guid2: vehicleGuid,
@@ -1691,6 +1803,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   manageVehicle(client: Client, vehicleGuid: string) {
+    if(typeof vehicleGuid !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>manageVehicle] vehicleGuid isn't of type string but of type ${typeof vehicleGuid}`);
+    }
+    
     if (this._vehicles[vehicleGuid].manager) {
       this.dropVehicleManager(this._vehicles[vehicleGuid].manager, vehicleGuid);
     }
@@ -1707,6 +1823,10 @@ export class ZoneServer2015 extends EventEmitter {
     this.sendData(client, "PlayerUpdate.ManagedObjectResponseControl", obj);
   }
   dropVehicleManager(client: Client, vehicleGuid: string) {
+    if(typeof vehicleGuid !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>dropVehicleManager] vehicleGuid isn't of type string but of type ${typeof vehicleGuid}`);
+    }
+    
     this.sendManagedObjectResponseControlPacket(client, {
       control: 0,
       objectCharacterId: vehicleGuid
@@ -2038,6 +2158,10 @@ export class ZoneServer2015 extends EventEmitter {
     }
   }
   dismissVehicle(vehicleGuid: string) {
+    if(typeof vehicleGuid !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>dismissVehicle] vehicleGuid isn't of type string but of type ${typeof vehicleGuid}`);
+    }
+    
     this.sendDataToAll("PlayerUpdate.RemovePlayerGracefully", {
       characterId: vehicleGuid
     });
@@ -2045,6 +2169,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   dropPlayerInParachute(client: Client, position: Float32Array) {
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>dropPlayerInParachute] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
     const characterId = this.generateGuid();
     const vehicleData = new Vehicle(
       this._worldId,
@@ -2074,6 +2202,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   updatePosition(client: Client, position: Float32Array) {
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>updatePosition] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
     client.character.state.position = position;
   }
 
@@ -2132,6 +2264,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   filterOutOfDistance(element: any, playerPosition: Float32Array): boolean {
+    if(!(playerPosition instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>filterOutOfDistance] playerPosition isn't of type Float32Array but of type ${typeof playerPosition}`);
+    }
+    
     return !isPosInRadius(
       (element.npcRenderDistance || this._npcRenderDistance) + 5,
       playerPosition,
@@ -2242,6 +2378,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   respawnDTO(DTO: string) {
+    if(typeof DTO !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>respawnDTO] DTO isn't of type string but of type ${typeof DTO}`);
+    }
+    
     const DTOData = this._destroyablesTimeout[DTO];
     let isColliding = false;
     for (const vehicle in this._vehicles) {
@@ -2259,18 +2399,30 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   setDTOrespawnTimeout(DTO: string) {
+    if(typeof DTO !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>setDTOrespawnTimeout] DTO isn't of type string but of type ${typeof DTO}`);
+    }
+    
     setTimeout(() => {
       this.respawnDTO(DTO);
     }, 1800000);
   }
 
   despawnEntity(characterId: string) {
+    if(typeof characterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>despawnEntity] characterId isn't of type string but of type ${typeof characterId}`);
+    }
+    
     this.sendDataToAll("PlayerUpdate.RemovePlayerGracefully", {
       characterId: characterId
     });
   }
 
   deleteEntity(characterId: string, dictionnary: any) {
+    if(typeof characterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>deleteEntity] characterId isn't of type string but of type ${typeof characterId}`);
+    }
+    
     this.sendDataToAll("PlayerUpdate.RemovePlayerGracefully", {
       characterId: characterId
     });
@@ -2289,6 +2441,10 @@ export class ZoneServer2015 extends EventEmitter {
     rotation: Array<number>,
     dictionnary: any
   ): void {
+    if(typeof modelID !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>createEntity] modelID isn't of type number but of type ${typeof modelID}`);
+    }
+    
     const guid = this.generateGuid();
     const characterId = this.generateGuid();
     dictionnary[characterId] = {
@@ -2321,6 +2477,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   data(collectionName: string): any {
+    if(typeof collectionName !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>data] collectionName isn't of type string but of type ${typeof collectionName}`);
+    }
+    
     if (this._db) {
       return this._db.collection(collectionName);
     }
@@ -2361,6 +2521,10 @@ export class ZoneServer2015 extends EventEmitter {
     client: Client,
     weatherTemplate: string
   ): Promise<void> {
+    if(typeof weatherTemplate !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>changeWeatherWithTemplate] weatherTemplate isn't of type string but of type ${typeof weatherTemplate}`);
+    }
+    
     const weather = this._soloMode
       ? localSpawnList[weatherTemplate]
       : await this._db
@@ -2387,6 +2551,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   sendSystemMessage(message: string): void {
+    if(typeof message !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>sendSystemMessage] message isn't of type string but of type ${typeof message}`);
+    }
+    
     this.sendDataToAll("Chat.Chat", {
       unknown2: 0,
       channel: 2,
@@ -2414,6 +2582,14 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   sendChat(client: Client, message: string, channel: number): void {
+    if(typeof message !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>sendChat] message isn't of type string but of type ${typeof message}`);
+    }
+    
+    if(typeof channel !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>sendChat] channel isn't of type number but of type ${typeof channel}`);
+    }
+    
     const { character } = client;
     for (const clientKey in this._clients) {
       const targetClient = this._clients[clientKey];
@@ -2435,24 +2611,40 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   sendGlobalChatText(message: string, clearChat = false): void {
+    if(typeof message !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>sendGlobalChatText] message isn't of type string but of type ${typeof message}`);
+    }
+    
     for (const a in this._clients) {
       this.sendChatText(this._clients[a], message, clearChat);
     }
   }
 
   sendGlobalTextAlert(message: string): void {
+    if(typeof message !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>sendGlobalTextAlert] message isn't of type string but of type ${typeof message}`);
+    }
+    
     for (const a in this._clients) {
       this.sendTextAlert(this._clients[a], message);
     }
   }
 
   sendTextAlert(client: Client, message: string): void {
+    if(typeof message !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>sendTextAlert] message isn't of type string but of type ${typeof message}`);
+    }
+    
     this.sendData(client, "ClientUpdate.TextAlert", {
       message: message
     });
   }
 
   sendChatText(client: Client, message: string, clearChat = false): void {
+    if(typeof message !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>sendChatText] message isn't of type string but of type ${typeof message}`);
+    }
+    
     if (clearChat) {
       for (let index = 0; index <= 6; index++) {
         this.sendData(client, "Chat.ChatText", {
@@ -2480,6 +2672,14 @@ export class ZoneServer2015 extends EventEmitter {
     loadoutId: number,
     loadoutTab: number
   ): void {
+    if(typeof loadoutId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>setCharacterLoadout] loadoutId isn't of type number but of type ${typeof loadoutId}`);
+    }
+    
+    if(typeof loadoutTab !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>setCharacterLoadout] loadoutTab isn't of type number but of type ${typeof loadoutTab}`);
+    }
+    
     for (let i = 0; i < client.character.loadouts.length; i++) {
       const loadout = client.character.loadouts[i];
       if (loadout.loadoutId == loadoutId && loadout.loadoutTab == loadoutTab) {
@@ -2554,6 +2754,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   sendWeaponPacket(client: Client, packetName: string, obj: any): void {
+    if(typeof packetName !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>sendWeaponPacket] packetName isn't of type string but of type ${typeof packetName}`);
+    }
+    
     const weaponPacket = {
       gameTime: this.getSequenceTime(),
       packetName: packetName,
@@ -2577,6 +2781,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   forceTime(time: number): void {
+    if(typeof time !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>forceTime] time isn't of type number but of type ${typeof time}`);
+    }
+    
     this._cycleSpeed = 0.1;
     this._frozeCycle = true;
     this._gameTime = time;
@@ -2636,6 +2844,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   getTransientId(characterId: string): number {
+    if(typeof characterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>getTransientId] characterId isn't of type string but of type ${typeof characterId}`);
+    }
+    
     const generatedTransient = this._transientIdGenerator.next()
       .value as number;
     this._transientIds[generatedTransient] = characterId;
@@ -2643,6 +2855,10 @@ export class ZoneServer2015 extends EventEmitter {
   }
 
   createPositionUpdate(position: Float32Array, rotation?: any): any {
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2015/zoneserver.ts=>createPositionUpdate] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
     const obj: any = {
       flags: 4095,
       unknown2_int32: this.getGameTime(),

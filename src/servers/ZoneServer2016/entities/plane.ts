@@ -18,6 +18,10 @@ import { Vehicle2016 } from "../entities/vehicle";
 import { ZoneClient2016 } from "../classes/zoneclient";
 
 function getActorModelId(vehicleId: number) {
+    if(typeof vehicleId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/plane.ts=>getActorModelId] vehicleId isn't of type number but of type ${typeof vehicleId}`);
+    }
+    
   switch (vehicleId) {
     case VehicleIds.OFFROADER:
       return 9215;

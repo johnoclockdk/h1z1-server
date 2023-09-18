@@ -18,6 +18,10 @@ import { ZoneClient2016 } from "../classes/zoneclient";
 import { DamageInfo } from "../../../types/zoneserver";
 
 function getDestroyedModels(actorModel: number): number[] {
+    if(typeof actorModel !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/doorentity.ts=>getDestroyedModels] actorModel isn't of type number but of type ${typeof actorModel}`);
+    }
+    
   switch (actorModel) {
     case 9455:
       return [9452, 9453, 9454];
@@ -35,6 +39,10 @@ function getDestroyedModels(actorModel: number): number[] {
 }
 
 function getDoorSound(actorModelId: number) {
+    if(typeof actorModelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/doorentity.ts=>getDoorSound] actorModelId isn't of type number but of type ${typeof actorModelId}`);
+    }
+    
   let openSound = 5048;
   let closeSound = 5049;
   switch (actorModelId) {
@@ -215,6 +223,10 @@ export class DoorEntity extends BaseLightweightCharacter {
     isInstant?: boolean
     /* eslint-enable @typescript-eslint/no-unused-vars */
   ) {
+    if(typeof isInstant !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/entities/doorentity.ts=>OnPlayerSelect] isInstant isn't of type boolean but of type ${typeof isInstant}`);
+    }
+    
     client; // eslint
     if (this.moving) {
       return;

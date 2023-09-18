@@ -30,6 +30,10 @@ import { LOADOUT_CONTAINER_ID } from "../../../utils/constants";
 import { Character2016 } from "./character";
 
 function getActorModelId(vehicleId: number) {
+    if(typeof vehicleId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/vehicle.ts=>getActorModelId] vehicleId isn't of type number but of type ${typeof vehicleId}`);
+    }
+    
   switch (vehicleId) {
     case VehicleIds.OFFROADER:
       return 7225;
@@ -49,6 +53,10 @@ function getActorModelId(vehicleId: number) {
 }
 
 function getVehicleName(ModelId: number) {
+    if(typeof ModelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/vehicle.ts=>getVehicleName] ModelId isn't of type number but of type ${typeof ModelId}`);
+    }
+    
   switch (ModelId) {
     case 7225:
       return StringIds.OFFROADER;
@@ -64,6 +72,10 @@ function getVehicleName(ModelId: number) {
 }
 
 function getVehicleLoadoutId(vehicleId: number) {
+    if(typeof vehicleId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/vehicle.ts=>getVehicleLoadoutId] vehicleId isn't of type number but of type ${typeof vehicleId}`);
+    }
+    
   switch (vehicleId) {
     case VehicleIds.OFFROADER:
       return LoadoutIds.VEHICLE_OFFROADER;
@@ -81,6 +93,10 @@ function getVehicleLoadoutId(vehicleId: number) {
 }
 
 function getDefaultLoadout(loadoutId: number) {
+    if(typeof loadoutId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/vehicle.ts=>getDefaultLoadout] loadoutId isn't of type number but of type ${typeof loadoutId}`);
+    }
+    
   switch (loadoutId) {
     case LoadoutIds.VEHICLE_OFFROADER:
       return vehicleDefaultLoadouts.offroader;
@@ -243,6 +259,10 @@ export class Vehicle2016 extends BaseLootableEntity {
     return -1;
   }
   getCharacterSeat(characterId: string) {
+    if(typeof characterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/entities/vehicle.ts=>getCharacterSeat] characterId isn't of type string but of type ${typeof characterId}`);
+    }
+    
     for (const seatId in this.seats) {
       if (this.seats[seatId] === characterId) {
         return seatId;
@@ -261,6 +281,10 @@ export class Vehicle2016 extends BaseLootableEntity {
   }
 
   removePassenger(characterId: string) {
+    if(typeof characterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/entities/vehicle.ts=>removePassenger] characterId isn't of type string but of type ${typeof characterId}`);
+    }
+    
     for (const seatId in this.seats) {
       if (this.seats[seatId] === characterId) {
         this.seats[seatId] = "";
@@ -414,6 +438,10 @@ export class Vehicle2016 extends BaseLootableEntity {
   }
 
   handleVehicleLock(server: ZoneServer2016, accessType: boolean) {
+    if(typeof accessType !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/entities/vehicle.ts=>handleVehicleLock] accessType isn't of type boolean but of type ${typeof accessType}`);
+    }
+    
     if (!accessType) {
       this.unlockVehicle(server);
       return;
@@ -731,6 +759,10 @@ export class Vehicle2016 extends BaseLootableEntity {
     isInstant?: boolean
     /* eslint-enable @typescript-eslint/no-unused-vars */
   ) {
+    if(typeof isInstant !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/entities/vehicle.ts=>OnPlayerSelect] isInstant isn't of type boolean but of type ${typeof isInstant}`);
+    }
+    
     !client.vehicle.mountedVehicle
       ? server.mountVehicle(client, this.characterId)
       : server.dismountVehicle(client);
@@ -746,6 +778,10 @@ export class Vehicle2016 extends BaseLootableEntity {
   }
 
   pGetItemData(server: ZoneServer2016, item: BaseItem, containerDefId: number) {
+    if(typeof containerDefId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/vehicle.ts=>pGetItemData] containerDefId isn't of type number but of type ${typeof containerDefId}`);
+    }
+    
     let durability: number = 0;
     switch (true) {
       case server.isWeapon(item.itemDefinitionId):

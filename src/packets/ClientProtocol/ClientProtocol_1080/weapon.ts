@@ -430,6 +430,10 @@ const [weaponPacketTypes, weaponPacketDescriptors] =
     PacketTableBuild(remoteWeaponUpdatePackets);
 
 function parseMultiWeaponPacket(data: Buffer, offset: number) {
+    if(typeof offset !== 'number'){
+    console.warn(`[src/packets/ClientProtocol/ClientProtocol_1080/weapon.ts=>parseMultiWeaponPacket] offset isn't of type number but of type ${typeof offset}`);
+    }
+    
   const startOffset = offset,
     packets = [];
   const n = data.readUInt32LE(offset);
@@ -451,6 +455,10 @@ function parseMultiWeaponPacket(data: Buffer, offset: number) {
 }
 
 export function parseWeaponPacket(data: Buffer, offset: number) {
+    if(typeof offset !== 'number'){
+    console.warn(`[src/packets/ClientProtocol/ClientProtocol_1080/weapon.ts=>parseWeaponPacket] offset isn't of type number but of type ${typeof offset}`);
+    }
+    
   const obj: any = {};
 
   obj.gameTime = data.readUInt32LE(offset);
@@ -617,6 +625,10 @@ const hitReportSchema = [
 ];
 
 function parseHitReportPacket(data: Buffer, offset: number) {
+    if(typeof offset !== 'number'){
+    console.warn(`[src/packets/ClientProtocol/ClientProtocol_1080/weapon.ts=>parseHitReportPacket] offset isn't of type number but of type ${typeof offset}`);
+    }
+    
   const obj: any = DataSchema.parse(hitReportSchema, data, offset).result;
   offset += 26 + obj.hitLocationLen;
   let byteLen = 8;

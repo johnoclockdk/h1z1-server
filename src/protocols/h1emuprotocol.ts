@@ -227,6 +227,10 @@ export class H1emuProtocol {
   }
 
   pack(packetName: string, object: any): Buffer | null {
+    if(typeof packetName !== 'string'){
+    console.warn(`[src/protocols/h1emuprotocol.ts=>pack] packetName isn't of type string but of type ${typeof packetName}`);
+    }
+    
     const packetType = H1emuPackets.PacketTypes[packetName],
       packet = H1emuPackets.Packets[packetType];
     let data;

@@ -43,6 +43,10 @@ const loadoutSlots = require("./../../../../data/2016/dataSources/LoadoutSlots.j
   equipSlotItemClasses = require("./../../../../data/2016/dataSources/EquipSlotItemClasses.json");
 
 function getGender(actorModelId: number): number {
+    if(typeof actorModelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>getGender] actorModelId isn't of type number but of type ${typeof actorModelId}`);
+    }
+    
   switch (actorModelId) {
     case 9510: // zombiemale
     case 9240: // male character
@@ -79,6 +83,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
   }
 
   getActiveLoadoutSlot(itemGuid: string): number {
+    if(typeof itemGuid !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>getActiveLoadoutSlot] itemGuid isn't of type string but of type ${typeof itemGuid}`);
+    }
+    
     // gets the loadoutSlotId of a specified itemGuid in the loadout
     for (const item of Object.values(this._loadout)) {
       if (itemGuid == item.itemGuid) {
@@ -88,6 +96,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
     return 0;
   }
   getLoadoutItem(itemGuid: string): LoadoutItem | undefined {
+    if(typeof itemGuid !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>getLoadoutItem] itemGuid isn't of type string but of type ${typeof itemGuid}`);
+    }
+    
     const loadoutSlotId = this.getActiveLoadoutSlot(itemGuid);
     if (this._loadout[loadoutSlotId]?.itemGuid == itemGuid) {
       return this._loadout[loadoutSlotId];
@@ -95,6 +107,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
     return;
   }
   getItemContainer(itemGuid: string): LoadoutContainer | undefined {
+    if(typeof itemGuid !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>getItemContainer] itemGuid isn't of type string but of type ${typeof itemGuid}`);
+    }
+    
     // returns the container that an item is contained in
     for (const container of Object.values(this._containers)) {
       if (container.items[itemGuid]) {
@@ -104,6 +120,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
     return;
   }
   getInventoryItem(itemGuid: string): BaseItem | undefined {
+    if(typeof itemGuid !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>getInventoryItem] itemGuid isn't of type string but of type ${typeof itemGuid}`);
+    }
+    
     const loadoutItem = this.getLoadoutItem(itemGuid);
     if (loadoutItem) {
       return loadoutItem;
@@ -116,6 +136,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
   }
 
   getContainerFromGuid(containerGuid: string): LoadoutContainer | undefined {
+    if(typeof containerGuid !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>getContainerFromGuid] containerGuid isn't of type string but of type ${typeof containerGuid}`);
+    }
+    
     for (const container of Object.values(this._containers)) {
       if (container.itemGuid == containerGuid) {
         return container;
@@ -125,6 +149,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
   }
 
   getItemById(itemDefId: number): BaseItem | undefined {
+    if(typeof itemDefId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>getItemById] itemDefId isn't of type number but of type ${typeof itemDefId}`);
+    }
+    
     for (const container of Object.values(this._containers)) {
       for (const item of Object.values(container.items)) {
         if (item.itemDefinitionId == itemDefId) {
@@ -136,6 +164,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
   }
 
   getLoadoutItemById(itemDefId: number): LoadoutItem | undefined {
+    if(typeof itemDefId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>getLoadoutItemById] itemDefId isn't of type number but of type ${typeof itemDefId}`);
+    }
+    
     for (const item of Object.values(this._loadout)) {
       if (item.itemDefinitionId == itemDefId) {
         return item;
@@ -159,6 +191,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
 
   // gets the amount of items of a specific itemDefinitionId
   getInventoryItemAmount(itemDefinitionId: number): number {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>getInventoryItemAmount] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
     let items = 0;
     for (const container of Object.values(this._containers)) {
       for (const item of Object.values(container.items)) {
@@ -196,6 +232,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
   }
 
   updateEquipmentSlot(server: ZoneServer2016, slotId: number) {
+    if(typeof slotId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>updateEquipmentSlot] slotId isn't of type number but of type ${typeof slotId}`);
+    }
+    
     if (!server.getClientByCharId(this.characterId)?.character.initialized)
       return;
     server.sendDataToAllWithSpawnedEntity(
@@ -370,6 +410,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
     count?: number,
     sendUpdate = true
   ) {
+    if(typeof count !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>lootItem] count isn't of type number but of type ${typeof count}`);
+    }
+    
     const client = server.getClientByCharId(this.characterId);
     if (!item || !item.isValid("lootItem")) return;
     if (!count) count = item.stackCount;
@@ -397,6 +441,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
     item?: BaseItem,
     count?: number
   ) {
+    if(typeof count !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>lootItemFromContainer] count isn't of type number but of type ${typeof count}`);
+    }
+    
     const client = server.getClientByCharId(this.characterId);
     if (!item || !item.isValid("lootItem")) return;
     if (!count) count = item.stackCount;
@@ -503,6 +551,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
     sendUpdate: boolean = true,
     array: LoadoutContainer[] = []
   ) {
+    if(typeof count !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>lootContainerItem] count isn't of type number but of type ${typeof count}`);
+    }
+    
     const client = server.getClientByContainerAccessor(this);
     if (!item || !item.isValid("lootContainerItem")) return;
     if (item.weapon) {
@@ -585,6 +637,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
   }
 
   isDefaultItem(itemDefinitionId: number): boolean {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>isDefaultItem] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
     let isDefault = false;
     this.defaultLoadout.forEach((defaultItem) => {
       if (defaultItem.item == itemDefinitionId) {
@@ -621,6 +677,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
     slotId: number,
     sourceCharacter: BaseFullCharacter = this
   ) {
+    if(typeof slotId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>equipContainerItem] slotId isn't of type number but of type ${typeof slotId}`);
+    }
+    
     // equips an existing item from a container
 
     const client = server.getClientByContainerAccessor(sourceCharacter);
@@ -733,6 +793,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
   }
 
   pGetEquipmentSlot(slotId: number) {
+    if(typeof slotId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>pGetEquipmentSlot] slotId isn't of type number but of type ${typeof slotId}`);
+    }
+    
     const slot = this._equipment[slotId];
     return slot
       ? {
@@ -754,6 +818,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
   }
 
   pGetAttachmentSlot(slotId: number) {
+    if(typeof slotId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>pGetAttachmentSlot] slotId isn't of type number but of type ${typeof slotId}`);
+    }
+    
     const slot = this._equipment[slotId];
     return slot
       ? {
@@ -773,6 +841,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
   }
 
   pGetEquipmentSlotFull(slotId: number) {
+    if(typeof slotId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>pGetEquipmentSlotFull] slotId isn't of type number but of type ${typeof slotId}`);
+    }
+    
     const slot = this._equipment[slotId];
     return slot
       ? {
@@ -801,6 +873,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
   }
 
   pGetLoadoutSlot(slotId: number) {
+    if(typeof slotId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>pGetLoadoutSlot] slotId isn't of type number but of type ${typeof slotId}`);
+    }
+    
     const slot = this._loadout[slotId];
     return {
       hotbarSlotId: slotId, // affects Equip Item context entry packet, and Container.MoveItem
@@ -830,6 +906,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
    * @returns Returns the ID of an available loadout slot.
    */
   getAvailableLoadoutSlot(server: ZoneServer2016, itemDefId: number): number {
+    if(typeof itemDefId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>getAvailableLoadoutSlot] itemDefId isn't of type number but of type ${typeof itemDefId}`);
+    }
+    
     // gets an open loadoutslot for a specified itemDefinitionId
     const itemDef = server.getItemDefinition(itemDefId),
       loadoutSlotItemClass = loadoutSlotItemClasses.find(
@@ -878,6 +958,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
     server: ZoneServer2016,
     itemDefId: number
   ): number {
+    if(typeof itemDefId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>getAvailablePassiveEquipmentSlot] itemDefId isn't of type number but of type ${typeof itemDefId}`);
+    }
+    
     const itemDef = server.getItemDefinition(itemDefId),
       itemClass = itemDef?.ITEM_CLASS;
     if (!itemDef || !itemClass || !server.isWeapon(itemDefId)) return 0;
@@ -904,6 +988,14 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
     itemDefinitionId: number,
     count: number
   ): LoadoutContainer | undefined {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>getAvailableContainer] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
+    if(typeof count !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>getAvailableContainer] count isn't of type number but of type ${typeof count}`);
+    }
+    
     const itemDef = server.getItemDefinition(itemDefinitionId);
     for (const container of Object.values(this._containers)) {
       if (
@@ -988,6 +1080,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
   }
 
   pGetItemData(server: ZoneServer2016, item: BaseItem, containerDefId: number) {
+    if(typeof containerDefId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>pGetItemData] containerDefId isn't of type number but of type ${typeof containerDefId}`);
+    }
+    
     let durability: number = 0;
     switch (true) {
       case server.isWeapon(item.itemDefinitionId):
@@ -1100,6 +1196,10 @@ export abstract class BaseFullCharacter extends BaseLightweightCharacter {
   }
 
   getResourceType(resourceId: number) {
+    if(typeof resourceId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/basefullcharacter.ts=>getResourceType] resourceId isn't of type number but of type ${typeof resourceId}`);
+    }
+    
     switch (resourceId) {
       case ResourceIds.HEALTH:
         return ResourceTypes.HEALTH;

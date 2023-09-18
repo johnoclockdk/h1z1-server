@@ -28,6 +28,14 @@ function combineItemStack(
   count: number,
   targetCharacter: BaseFullCharacter
 ) {
+    if(typeof oldStackCount !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/classes/loadoutcontainer.ts=>combineItemStack] oldStackCount isn't of type number but of type ${typeof oldStackCount}`);
+    }
+    
+    if(typeof count !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/classes/loadoutcontainer.ts=>combineItemStack] count isn't of type number but of type ${typeof count}`);
+    }
+    
   if (oldStackCount == count) {
     // if full stack is moved
     server.addContainerItem(targetCharacter, item, targetContainer, false);
@@ -97,6 +105,14 @@ export class LoadoutContainer extends LoadoutItem {
     itemDefinitionId: number,
     count: number
   ): boolean {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/classes/loadoutcontainer.ts=>getHasSpace] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
+    if(typeof count !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/classes/loadoutcontainer.ts=>getHasSpace] count isn't of type number but of type ${typeof count}`);
+    }
+    
     if (this.getMaxBulk(server) == 0) return true; // for external containers
     return !!(
       this.getMaxBulk(server) -
@@ -119,6 +135,14 @@ export class LoadoutContainer extends LoadoutItem {
     itemDefId: number,
     count: number
   ): string {
+    if(typeof itemDefId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/classes/loadoutcontainer.ts=>getAvailableItemStack] itemDefId isn't of type number but of type ${typeof itemDefId}`);
+    }
+    
+    if(typeof count !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/classes/loadoutcontainer.ts=>getAvailableItemStack] count isn't of type number but of type ${typeof count}`);
+    }
+    
     //
     // if slotId is defined, then only an item with the same slotId will be returned
     if (server.getItemDefinition(itemDefId).MAX_STACK_SIZE == 1) return "";
@@ -151,6 +175,14 @@ export class LoadoutContainer extends LoadoutItem {
     newSlotId: number,
     count?: number
   ) {
+    if(typeof newSlotId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/classes/loadoutcontainer.ts=>transferItem] newSlotId isn't of type number but of type ${typeof newSlotId}`);
+    }
+    
+    if(typeof count !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/classes/loadoutcontainer.ts=>transferItem] count isn't of type number but of type ${typeof count}`);
+    }
+    
     if (!count) count = item.stackCount;
     const oldStackCount = item.stackCount, // saves stack count before it gets altered
       sourceCharacter = server.getEntity(this.loadoutItemOwnerGuid),

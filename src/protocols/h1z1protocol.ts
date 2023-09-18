@@ -82,11 +82,19 @@ export class H1Z1Protocol {
   }
 
   createPositionBroadcast(rawData: Buffer, transientId: number): Buffer {
+    if(typeof transientId !== 'number'){
+    console.warn(`[src/protocols/h1z1protocol.ts=>createPositionBroadcast] transientId isn't of type number but of type ${typeof transientId}`);
+    }
+    
     const tId = packUnsignedIntWith2bitLengthValue(transientId);
     return Buffer.concat([new Uint8Array([120]), tId, rawData]);
   }
 
   createPositionBroadcast2016(rawData: Buffer, transientId: number): Buffer {
+    if(typeof transientId !== 'number'){
+    console.warn(`[src/protocols/h1z1protocol.ts=>createPositionBroadcast2016] transientId isn't of type number but of type ${typeof transientId}`);
+    }
+    
     const tId = packUnsignedIntWith2bitLengthValue(transientId);
     return Buffer.concat([Buffer.from([0x79]), tId, rawData]); //0x79 = opcode
   }
@@ -99,6 +107,10 @@ export class H1Z1Protocol {
     rawData: Buffer,
     transientId: number
   ): Buffer {
+    if(typeof transientId !== 'number'){
+    console.warn(`[src/protocols/h1z1protocol.ts=>createVehiclePositionBroadcast2016] transientId isn't of type number but of type ${typeof transientId}`);
+    }
+    
     const tId = packUnsignedIntWith2bitLengthValue(transientId);
     return Buffer.concat([Buffer.from([0x91]), tId, rawData]); //0x91 = opcode
   }
@@ -318,6 +330,10 @@ export class H1Z1Protocol {
   }
 
   parseUpdatePositionClientToZone(data: Buffer, offset: number) {
+    if(typeof offset !== 'number'){
+    console.warn(`[src/protocols/h1z1protocol.ts=>parseUpdatePositionClientToZone] offset isn't of type number but of type ${typeof offset}`);
+    }
+    
     return {
       result: parseUpdatePositionData(data, offset)
     };
@@ -333,6 +349,10 @@ export class H1Z1Protocol {
   }
 
   parseUpdatePositionZoneToClient(data: Buffer, offset: number) {
+    if(typeof offset !== 'number'){
+    console.warn(`[src/protocols/h1z1protocol.ts=>parseUpdatePositionZoneToClient] offset isn't of type number but of type ${typeof offset}`);
+    }
+    
     const obj = {} as PositionZoneToClient;
 
     const v = readUnsignedIntWith2bitLengthValue(data, offset);
@@ -347,6 +367,10 @@ export class H1Z1Protocol {
   }
 
   pack(packetName: string, object: any = {}): Buffer | null {
+    if(typeof packetName !== 'string'){
+    console.warn(`[src/protocols/h1z1protocol.ts=>pack] packetName isn't of type string but of type ${typeof packetName}`);
+    }
+    
     const H1Z1Packets = this.H1Z1Packets;
     const packetType: number = H1Z1Packets.PacketTypes[packetName];
     const packet = H1Z1Packets.Packets[packetType];
@@ -386,6 +410,10 @@ export class H1Z1Protocol {
   }
 
   resolveOpcode(opCode: number, data: Buffer) {
+    if(typeof opCode !== 'number'){
+    console.warn(`[src/protocols/h1z1protocol.ts=>resolveOpcode] opCode isn't of type number but of type ${typeof opCode}`);
+    }
+    
     const H1Z1Packets = this.H1Z1Packets;
     let packet, offset;
     if (H1Z1Packets.Packets[opCode]) {
@@ -414,6 +442,10 @@ export class H1Z1Protocol {
   }
 
   parse(data: Buffer, flag: number): H1z1ProtocolReadingFormat | null {
+    if(typeof flag !== 'number'){
+    console.warn(`[src/protocols/h1z1protocol.ts=>parse] flag isn't of type number but of type ${typeof flag}`);
+    }
+    
     const H1Z1Packets = this.H1Z1Packets;
     const opCode = data[0];
     let offset = 0,

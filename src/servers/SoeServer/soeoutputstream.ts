@@ -33,6 +33,18 @@ export class SOEOutputStream extends EventEmitter {
   }
 
   addToCache(sequence: number, data: Uint8Array, isFragment: boolean) {
+    if(typeof sequence !== 'number'){
+    console.warn(`[src/servers/SoeServer/soeoutputstream.ts=>addToCache] sequence isn't of type number but of type ${typeof sequence}`);
+    }
+    
+    if(!(data instanceof Uint8Array)){
+    console.warn(`[src/servers/SoeServer/soeoutputstream.ts=>addToCache] data isn't of type Uint8Array but of type ${typeof data}`);
+    }
+    
+    if(typeof isFragment !== 'boolean'){
+    console.warn(`[src/servers/SoeServer/soeoutputstream.ts=>addToCache] isFragment isn't of type boolean but of type ${typeof isFragment}`);
+    }
+    
     this._cache[sequence] = {
       data: data,
       fragment: isFragment
@@ -40,12 +52,20 @@ export class SOEOutputStream extends EventEmitter {
   }
 
   removeFromCache(sequence: number): void {
+    if(typeof sequence !== 'number'){
+    console.warn(`[src/servers/SoeServer/soeoutputstream.ts=>removeFromCache] sequence isn't of type number but of type ${typeof sequence}`);
+    }
+    
     if (!!this._cache[sequence]) {
       delete this._cache[sequence];
     }
   }
 
   write(data: Uint8Array, unbuffered: boolean = false): void {
+    if(!(data instanceof Uint8Array)){
+    console.warn(`[src/servers/SoeServer/soeoutputstream.ts=>write] data isn't of type Uint8Array but of type ${typeof data}`);
+    }
+    
     if (this._useEncryption) {
       data = Buffer.from(this._rc4.encrypt(data));
 
@@ -74,6 +94,10 @@ export class SOEOutputStream extends EventEmitter {
   }
 
   ack(sequence: number, unAckData: Map<number, number>): void {
+    if(typeof sequence !== 'number'){
+    console.warn(`[src/servers/SoeServer/soeoutputstream.ts=>ack] sequence isn't of type number but of type ${typeof sequence}`);
+    }
+    
     // delete all data / timers cached for the sequences behind the given ack sequence
     while (this.lastAck.get() !== wrappedUint16.wrap(sequence + 1)) {
       const lastAck = this.lastAck.get();
@@ -84,6 +108,10 @@ export class SOEOutputStream extends EventEmitter {
   }
 
   resendData(sequence: number): void {
+    if(typeof sequence !== 'number'){
+    console.warn(`[src/servers/SoeServer/soeoutputstream.ts=>resendData] sequence isn't of type number but of type ${typeof sequence}`);
+    }
+    
     if (this._cache[sequence]) {
       this.emit(
         "dataResend",
@@ -102,6 +130,10 @@ export class SOEOutputStream extends EventEmitter {
   }
 
   setEncryption(value: boolean): void {
+    if(typeof value !== 'boolean'){
+    console.warn(`[src/servers/SoeServer/soeoutputstream.ts=>setEncryption] value isn't of type boolean but of type ${typeof value}`);
+    }
+    
     this._useEncryption = value;
     debug("encryption: " + this._useEncryption);
   }
@@ -112,6 +144,10 @@ export class SOEOutputStream extends EventEmitter {
   }
 
   setFragmentSize(value: number): void {
+    if(typeof value !== 'number'){
+    console.warn(`[src/servers/SoeServer/soeoutputstream.ts=>setFragmentSize] value isn't of type number but of type ${typeof value}`);
+    }
+    
     this._fragmentSize = value;
   }
 }

@@ -18,6 +18,14 @@ import http from "node:http";
 import { DB_COLLECTIONS } from "../../../utils/enums";
 import { DB_NAME } from "../../../utils/constants";
 function sendMessageToServer(type: string, requestId: number, data: any) {
+    if(typeof type !== 'string'){
+    console.warn(`[src/servers/LoginServer/workers/httpServer.ts=>sendMessageToServer] type isn't of type string but of type ${typeof type}`);
+    }
+    
+    if(typeof requestId !== 'number'){
+    console.warn(`[src/servers/LoginServer/workers/httpServer.ts=>sendMessageToServer] requestId isn't of type number but of type ${typeof requestId}`);
+    }
+    
   const message: httpServerMessage = {
     type: type,
     requestId: requestId,
@@ -38,6 +46,10 @@ let requestCount = 0;
 const pendingRequest: any = {};
 
 function parseQueryString(queryString: string) {
+    if(typeof queryString !== 'string'){
+    console.warn(`[src/servers/LoginServer/workers/httpServer.ts=>parseQueryString] queryString isn't of type string but of type ${typeof queryString}`);
+    }
+    
   const queryObject: any = {};
   const elementArray = queryString.split("&");
   elementArray.forEach((element: string) => {

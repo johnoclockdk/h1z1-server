@@ -18,6 +18,10 @@ import { eul2quat } from "../../../utils/utils";
 import { Items } from "../models/enums";
 
 function getDestroyedModels(actorModel: string): number[] {
+    if(typeof actorModel !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/entities/destroyable.ts=>getDestroyedModels] actorModel isn't of type string but of type ${typeof actorModel}`);
+    }
+    
   switch (actorModel) {
     case "Common_Props_GlassWindow01.adr":
       return [8027, 8028, 8029];
@@ -128,6 +132,10 @@ export class Destroyable extends BaseLightweightCharacter {
     isInstant?: boolean
     /* eslint-enable @typescript-eslint/no-unused-vars */
   ) {
+    if(typeof isInstant !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/entities/destroyable.ts=>OnPlayerSelect] isInstant isn't of type boolean but of type ${typeof isInstant}`);
+    }
+    
     this.destroy(server);
   }
 }

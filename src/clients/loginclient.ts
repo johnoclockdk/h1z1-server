@@ -151,6 +151,10 @@ export class LoginClient extends EventEmitter {
   }
 
   login(fingerprint: string) {
+    if(typeof fingerprint !== 'string'){
+    console.warn(`[src/clients/loginclient.ts=>login] fingerprint isn't of type string but of type ${typeof fingerprint}`);
+    }
+    
     const data = this._protocol.pack("LoginRequest", {
       sessionId: this._soeClient._sessionId.toString(),
       systemFingerPrint: fingerprint
@@ -178,6 +182,14 @@ export class LoginClient extends EventEmitter {
   }
 
   requestCharacterLogin(characterId: string, serverId: number, payload: any) {
+    if(typeof characterId !== 'string'){
+    console.warn(`[src/clients/loginclient.ts=>requestCharacterLogin] characterId isn't of type string but of type ${typeof characterId}`);
+    }
+    
+    if(typeof serverId !== 'number'){
+    console.warn(`[src/clients/loginclient.ts=>requestCharacterLogin] serverId isn't of type number but of type ${typeof serverId}`);
+    }
+    
     debug("Requesting character login");
     const data = this._protocol.pack("CharacterLoginRequest", {
       characterId: characterId,

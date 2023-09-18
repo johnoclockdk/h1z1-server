@@ -332,6 +332,10 @@ export class LoginServer extends EventEmitter {
   }
 
   async getGuidByAuthkey(authKey: string): Promise<string | undefined> {
+    if(typeof authKey !== 'string'){
+    console.warn(`[src/servers/LoginServer/loginserver.ts=>getGuidByAuthkey] authKey isn't of type string but of type ${typeof authKey}`);
+    }
+    
     const session = await this._db
       .collection(DB_COLLECTIONS.USERS_SESSIONS)
       .findOne({ authKey });
@@ -340,6 +344,10 @@ export class LoginServer extends EventEmitter {
   }
 
   async getClientByGuid(guid: string): Promise<Client | undefined> {
+    if(typeof guid !== 'string'){
+    console.warn(`[src/servers/LoginServer/loginserver.ts=>getClientByGuid] guid isn't of type string but of type ${typeof guid}`);
+    }
+    
     const session = await this._db
       .collection(DB_COLLECTIONS.USERS_SESSIONS)
       .findOne({ guid });
@@ -356,12 +364,20 @@ export class LoginServer extends EventEmitter {
   }
 
   rejectH1emuConnection(serverId: number, client: H1emuClient) {
+    if(typeof serverId !== 'number'){
+    console.warn(`[src/servers/LoginServer/loginserver.ts=>rejectH1emuConnection] serverId isn't of type number but of type ${typeof serverId}`);
+    }
+    
     debug(
       `rejected connection serverId : ${serverId} address: ${client.address} `
     );
     delete this._zoneConnectionManager._clients[client.clientId];
   }
   private async _isServerOfficial(serverId: number): Promise<boolean> {
+    if(typeof serverId !== 'number'){
+    console.warn(`[src/servers/LoginServer/loginserver.ts=>_isServerOfficial] serverId isn't of type number but of type ${typeof serverId}`);
+    }
+    
     const server = await this._db
       .collection(DB_COLLECTIONS.SERVERS)
       .findOne({ serverId });
@@ -369,6 +385,10 @@ export class LoginServer extends EventEmitter {
   }
 
   parseData(clientProtocol: string, data: Buffer) {
+    if(typeof clientProtocol !== 'string'){
+    console.warn(`[src/servers/LoginServer/loginserver.ts=>parseData] clientProtocol isn't of type string but of type ${typeof clientProtocol}`);
+    }
+    
     switch (clientProtocol) {
       case "LoginUdp_9":
         return this._protocol.parse(data);
@@ -638,6 +658,14 @@ export class LoginServer extends EventEmitter {
   }
 
   async updateServerStatus(serverId: number, status: boolean) {
+    if(typeof serverId !== 'number'){
+    console.warn(`[src/servers/LoginServer/loginserver.ts=>updateServerStatus] serverId isn't of type number but of type ${typeof serverId}`);
+    }
+    
+    if(typeof status !== 'boolean'){
+    console.warn(`[src/servers/LoginServer/loginserver.ts=>updateServerStatus] status isn't of type boolean but of type ${typeof status}`);
+    }
+    
     const server = await this._db
       .collection(DB_COLLECTIONS.SERVERS)
       .findOneAndUpdate(
@@ -662,6 +690,14 @@ export class LoginServer extends EventEmitter {
   }
 
   async updateZoneServerVersion(serverId: number, version: string) {
+    if(typeof serverId !== 'number'){
+    console.warn(`[src/servers/LoginServer/loginserver.ts=>updateZoneServerVersion] serverId isn't of type number but of type ${typeof serverId}`);
+    }
+    
+    if(typeof version !== 'string'){
+    console.warn(`[src/servers/LoginServer/loginserver.ts=>updateZoneServerVersion] version isn't of type string but of type ${typeof version}`);
+    }
+    
     await this._db.collection(DB_COLLECTIONS.SERVERS).updateOne(
       { serverId: serverId },
       {
@@ -802,6 +838,14 @@ export class LoginServer extends EventEmitter {
     characterId: string,
     authKey: string | undefined
   ): Promise<CharacterLoginReply> {
+    if(typeof serverId !== 'number'){
+    console.warn(`[src/servers/LoginServer/loginserver.ts=>getCharactersLoginInfo] serverId isn't of type number but of type ${typeof serverId}`);
+    }
+    
+    if(typeof characterId !== 'string'){
+    console.warn(`[src/servers/LoginServer/loginserver.ts=>getCharactersLoginInfo] characterId isn't of type string but of type ${typeof characterId}`);
+    }
+    
     const { serverAddress, populationNumber, maxPopulationNumber } =
       await this._db
         .collection(DB_COLLECTIONS.SERVERS)
@@ -847,6 +891,10 @@ export class LoginServer extends EventEmitter {
   }
 
   async getCharactersLoginInfoSolo(client: Client, characterId: string) {
+    if(typeof characterId !== 'string'){
+    console.warn(`[src/servers/LoginServer/loginserver.ts=>getCharactersLoginInfoSolo] characterId isn't of type string but of type ${typeof characterId}`);
+    }
+    
     const SinglePlayerCharacters = await this.loadCharacterData(client);
     let character;
     switch (client.gameVersion) {
@@ -887,11 +935,19 @@ export class LoginServer extends EventEmitter {
   // need to be self-implemented
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async isClientUsingVpn(_address: string): Promise<boolean> {
+    if(typeof _address !== 'string'){
+    console.warn(`[src/servers/LoginServer/loginserver.ts=>isClientUsingVpn] _address isn't of type string but of type ${typeof _address}`);
+    }
+    
     return false;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async isClientHWIDBanned(client: Client, serverId: number): Promise<boolean> {
+    if(typeof serverId !== 'number'){
+    console.warn(`[src/servers/LoginServer/loginserver.ts=>isClientHWIDBanned] serverId isn't of type number but of type ${typeof serverId}`);
+    }
+    
     return false;
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -900,6 +956,10 @@ export class LoginServer extends EventEmitter {
     return true;
   }
   async getOwnerBanInfo(serverId: number, client: Client) {
+    if(typeof serverId !== 'number'){
+    console.warn(`[src/servers/LoginServer/loginserver.ts=>getOwnerBanInfo] serverId isn't of type number but of type ${typeof serverId}`);
+    }
+    
     const ownerBanInfos: any[] = await this._db
       .collection(DB_COLLECTIONS.BANNED_LIGHT)
       .find({ authKey: client.authKey, status: true })
@@ -1021,6 +1081,14 @@ export class LoginServer extends EventEmitter {
     packetName: string,
     packetObj: any
   ): Promise<unknown> {
+    if(typeof serverId !== 'number'){
+    console.warn(`[src/servers/LoginServer/loginserver.ts=>askZone] serverId isn't of type number but of type ${typeof serverId}`);
+    }
+    
+    if(typeof packetName !== 'string'){
+    console.warn(`[src/servers/LoginServer/loginserver.ts=>askZone] packetName isn't of type string but of type ${typeof packetName}`);
+    }
+    
     const askZonePromise = await new Promise((resolve) => {
       this._internalReqCount++;
       const reqId = this._internalReqCount;

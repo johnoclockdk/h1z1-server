@@ -23,6 +23,10 @@ export class ChatManager {
     message: string,
     clearChat = false
   ) {
+    if(typeof message !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/chatmanager.ts=>sendChatText] message isn't of type string but of type ${typeof message}`);
+    }
+    
     if (clearChat) {
       for (let index = 0; index <= 6; index++) {
         server.sendData(client, "Chat.ChatText", {
@@ -50,6 +54,10 @@ export class ChatManager {
     message: string,
     clearChat = false
   ) {
+    if(typeof message !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/chatmanager.ts=>sendChatTextToAllOthers] message isn't of type string but of type ${typeof message}`);
+    }
+    
     for (const a in server._clients) {
       if (client != server._clients[a]) {
         this.sendChatText(server, server._clients[a], message, clearChat);
@@ -61,6 +69,10 @@ export class ChatManager {
     message: string,
     clearChat = false
   ) {
+    if(typeof message !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/chatmanager.ts=>sendChatTextToAdmins] message isn't of type string but of type ${typeof message}`);
+    }
+    
     for (const a in server._clients) {
       if (server._clients[a].isAdmin) {
         this.sendChatText(server, server._clients[a], message, clearChat);
@@ -72,6 +84,10 @@ export class ChatManager {
     message: string,
     clearChat = false
   ) {
+    if(typeof message !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/chatmanager.ts=>sendGlobalChatText] message isn't of type string but of type ${typeof message}`);
+    }
+    
     for (const a in server._clients) {
       this.sendChatText(server, server._clients[a], message, clearChat);
     }
@@ -82,6 +98,14 @@ export class ChatManager {
     message: string,
     range: number
   ) {
+    if(typeof message !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/chatmanager.ts=>sendChatToAllInRange] message isn't of type string but of type ${typeof message}`);
+    }
+    
+    if(typeof range !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/chatmanager.ts=>sendChatToAllInRange] range isn't of type number but of type ${typeof range}`);
+    }
+    
     server.sendDataToAllInRange(
       range,
       client.character.state.position,
@@ -102,6 +126,10 @@ export class ChatManager {
     client: Client,
     message: string
   ) {
+    if(typeof message !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/chatmanager.ts=>sendChatToAllWithRadio] message isn't of type string but of type ${typeof message}`);
+    }
+    
     for (const a in server._clients) {
       const c = server._clients[a];
       if (c.radio) {
@@ -124,6 +152,18 @@ export class ChatManager {
     adminName: string,
     timestamp: number
   ) {
+    if(typeof reason !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/chatmanager.ts=>muteClient] reason isn't of type string but of type ${typeof reason}`);
+    }
+    
+    if(typeof adminName !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/chatmanager.ts=>muteClient] adminName isn't of type string but of type ${typeof adminName}`);
+    }
+    
+    if(typeof timestamp !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/chatmanager.ts=>muteClient] timestamp isn't of type number but of type ${typeof timestamp}`);
+    }
+    
     const object: ClientMute = {
       name: client.character.name.toLowerCase() || "",
       muteReason: reason ? reason : "no reason",

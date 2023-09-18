@@ -40,6 +40,14 @@ export class LoadoutItem extends BaseItem {
     targetCharacterId: string,
     newSlotId: number
   ) {
+    if(typeof targetCharacterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/classes/loadoutItem.ts=>transferLoadoutItem] targetCharacterId isn't of type string but of type ${typeof targetCharacterId}`);
+    }
+    
+    if(typeof newSlotId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/classes/loadoutItem.ts=>transferLoadoutItem] newSlotId isn't of type number but of type ${typeof newSlotId}`);
+    }
+    
     const client = server.getClientByCharId(targetCharacterId);
     if (!client) return;
     const oldLoadoutItem = client.character._loadout[newSlotId];

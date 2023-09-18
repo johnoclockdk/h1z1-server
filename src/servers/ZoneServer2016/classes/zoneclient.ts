@@ -131,6 +131,10 @@ export class ZoneClient2016 {
     this.character = new Character2016(characterId, transientId, server);
   }
   addPing(ping: number) {
+    if(typeof ping !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/classes/zoneclient.ts=>addPing] ping isn't of type number but of type ${typeof ping}`);
+    }
+    
     if (ping > 0) {
       this.pings.push(ping);
     }

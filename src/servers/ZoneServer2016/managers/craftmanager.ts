@@ -115,6 +115,14 @@ export class CraftManager {
     itemDefinitionId: number,
     count: number
   ): boolean {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/craftmanager.ts=>removeSimulatedCraftComponent] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
+    if(typeof count !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/craftmanager.ts=>removeSimulatedCraftComponent] count isn't of type number but of type ${typeof count}`);
+    }
+    
     const removeItem = this.componentsDataSource[itemDefinitionId];
     if (!removeItem) return false;
     if (removeItem.stackCount == count) {
@@ -140,6 +148,10 @@ export class CraftManager {
     itemDS: ItemDataSource,
     count: number
   ): boolean {
+    if(typeof count !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/craftmanager.ts=>removeCraftComponent] count isn't of type number but of type ${typeof count}`);
+    }
+    
     // todo: check items on ground and proximity containers
     return server.removeInventoryItem(itemDS.character, itemDS.item, count);
   }
@@ -162,6 +174,18 @@ export class CraftManager {
     recipeId: number,
     craftCount: number
   ): Promise<boolean> {
+    if(typeof recipeCount !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/craftmanager.ts=>generateCraftQueue] recipeCount isn't of type number but of type ${typeof recipeCount}`);
+    }
+    
+    if(typeof recipeId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/craftmanager.ts=>generateCraftQueue] recipeId isn't of type number but of type ${typeof recipeId}`);
+    }
+    
+    if(typeof craftCount !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/craftmanager.ts=>generateCraftQueue] craftCount isn't of type number but of type ${typeof craftCount}`);
+    }
+    
     for (const component of recipe.components) {
       const remainingItems = component.requiredAmount * recipeCount;
       // if component isn't found at all
@@ -347,6 +371,14 @@ export class CraftManager {
     recipeId: number,
     recipeCount: number
   ): Promise<boolean> {
+    if(typeof recipeId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/craftmanager.ts=>craftItem] recipeId isn't of type number but of type ${typeof recipeId}`);
+    }
+    
+    if(typeof recipeCount !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/craftmanager.ts=>craftItem] recipeCount isn't of type number but of type ${typeof recipeCount}`);
+    }
+    
     if (!recipeCount) return false;
     this.craftLoopCount++;
     if (this.craftLoopCount > this.maxCraftLoopCount) {
@@ -463,6 +495,14 @@ export class CraftManager {
     recipeId: number,
     count: number
   ) {
+    if(typeof recipeId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/craftmanager.ts=>start] recipeId isn't of type number but of type ${typeof recipeId}`);
+    }
+    
+    if(typeof count !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/craftmanager.ts=>start] count isn't of type number but of type ${typeof count}`);
+    }
+    
     for (let i = 0; i < count; i++) {
       if (!(await this.craftItem(server, client, recipeId, 1))) return;
     }

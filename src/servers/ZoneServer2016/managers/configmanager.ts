@@ -23,6 +23,10 @@ process.env.isBin &&
   path.join(__dirname, "../../../../data/2016/sampleData/defaultconfig.yaml");
 
 function fileExists(filePath: string): boolean {
+    if(typeof filePath !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/configmanager.ts=>fileExists] filePath isn't of type string but of type ${typeof filePath}`);
+    }
+    
   try {
     fs.accessSync(filePath);
     return true;
@@ -75,6 +79,10 @@ export class ConfigManager {
   }
 
   public loadYaml(path: string, relative = true): Config | undefined {
+    if(typeof path !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/configmanager.ts=>loadYaml] path isn't of type string but of type ${typeof path}`);
+    }
+    
     return yaml.load(
       fs.readFileSync(`${relative ? __dirname : ""}${path}`, "utf8")
     ) as unknown as Config;

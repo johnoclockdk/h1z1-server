@@ -44,12 +44,20 @@ export class SOEInputStream extends EventEmitter {
     dataToProcess: Fragment,
     sequence: number
   ): Array<Buffer> {
+    if(typeof sequence !== 'number'){
+    console.warn(`[src/servers/SoeServer/soeinputstream.ts=>processSingleData] sequence isn't of type number but of type ${typeof sequence}`);
+    }
+    
     this._fragments.delete(sequence);
     this._lastProcessedSequence = sequence;
     return parseChannelPacketData(dataToProcess.payload);
   }
 
   private processFragmentedData(firstPacketSequence: number): Array<Buffer> {
+    if(typeof firstPacketSequence !== 'number'){
+    console.warn(`[src/servers/SoeServer/soeinputstream.ts=>processFragmentedData] firstPacketSequence isn't of type number but of type ${typeof firstPacketSequence}`);
+    }
+    
     // cpf == current processed fragment
     if (!this.has_cpf) {
       const firstPacket = this._fragments.get(firstPacketSequence) as Fragment; // should be always defined
@@ -155,6 +163,10 @@ export class SOEInputStream extends EventEmitter {
   }
 
   private acknowledgeInputData(sequence: number): boolean {
+    if(typeof sequence !== 'number'){
+    console.warn(`[src/servers/SoeServer/soeinputstream.ts=>acknowledgeInputData] sequence isn't of type number but of type ${typeof sequence}`);
+    }
+    
     if (sequence > this._nextSequence.get()) {
       debug(
         "Sequence out of order, expected " +
@@ -185,6 +197,14 @@ export class SOEInputStream extends EventEmitter {
   }
 
   write(data: Buffer, sequence: number, isFragment: boolean): void {
+    if(typeof sequence !== 'number'){
+    console.warn(`[src/servers/SoeServer/soeinputstream.ts=>write] sequence isn't of type number but of type ${typeof sequence}`);
+    }
+    
+    if(typeof isFragment !== 'boolean'){
+    console.warn(`[src/servers/SoeServer/soeinputstream.ts=>write] isFragment isn't of type boolean but of type ${typeof isFragment}`);
+    }
+    
     debug(
       "Writing " + data.length + " bytes, sequence " + sequence,
       " fragment=" + isFragment + ", lastAck: " + this._lastAck.get()
@@ -200,6 +220,10 @@ export class SOEInputStream extends EventEmitter {
   }
 
   setEncryption(value: boolean): void {
+    if(typeof value !== 'boolean'){
+    console.warn(`[src/servers/SoeServer/soeinputstream.ts=>setEncryption] value isn't of type boolean but of type ${typeof value}`);
+    }
+    
     this._useEncryption = value;
     debug("encryption: " + this._useEncryption);
   }
@@ -214,6 +238,10 @@ function readDataLength(
   data: Buffer,
   offset: number
 ): { length: number; sizeValueBytes: number } {
+    if(typeof offset !== 'number'){
+    console.warn(`[src/servers/SoeServer/soeinputstream.ts=>readDataLength] offset isn't of type number but of type ${typeof offset}`);
+    }
+    
   let length = data.readUInt8(offset),
     sizeValueBytes;
   if (length === MAX_UINT8) {

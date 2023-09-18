@@ -12,6 +12,10 @@
 // ======================================================================
 
 function getRewardId(itemDefinitionId: number): number | undefined {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/smeltingmanager.ts=>getRewardId] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
   switch (itemDefinitionId) {
     case Items.DEW_COLLECTOR:
       return Items.WATER_STAGNANT;
@@ -127,6 +131,10 @@ export class SmeltingManager {
     server: ZoneServer2016,
     characterId: string
   ): LootableConstructionEntity | undefined {
+    if(typeof characterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/smeltingmanager.ts=>getTrueEntity] characterId isn't of type string but of type ${typeof characterId}`);
+    }
+    
     return (
       server._lootableConstruction[characterId] ||
       server._worldLootableConstruction[characterId] ||

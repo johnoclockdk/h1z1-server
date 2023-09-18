@@ -212,6 +212,10 @@ export class WeatherManager {
   }
 
   forceTime(server: ZoneServer2016, time: number) {
+    if(typeof time !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/weathermanager.ts=>forceTime] time isn't of type number but of type ${typeof time}`);
+    }
+    
     this.cycleSpeed = 0.1;
     this.frozeCycle = true;
     server._gameTime = time;
@@ -330,6 +334,18 @@ export class WeatherManager {
     startTime: number,
     timeMultiplier: number
   ) {
+    if(typeof serverTime !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/weathermanager.ts=>dynamicWeather] serverTime isn't of type number but of type ${typeof serverTime}`);
+    }
+    
+    if(typeof startTime !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/weathermanager.ts=>dynamicWeather] startTime isn't of type number but of type ${typeof startTime}`);
+    }
+    
+    if(typeof timeMultiplier !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/weathermanager.ts=>dynamicWeather] timeMultiplier isn't of type number but of type ${typeof timeMultiplier}`);
+    }
+    
     const delta = Date.now() - startTime;
     const currentDate = new Date((serverTime + delta) * timeMultiplier);
     const currentHour = currentDate.getUTCHours();

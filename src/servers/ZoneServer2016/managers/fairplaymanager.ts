@@ -124,6 +124,14 @@ export class FairPlayManager {
     sequenceTime: number,
     position: Float32Array
   ): boolean {
+    if(typeof sequenceTime !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/fairplaymanager.ts=>checkPlayerSpeed] sequenceTime isn't of type number but of type ${typeof sequenceTime}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/fairplaymanager.ts=>checkPlayerSpeed] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
     if (client.isAdmin || !this.fairPlayValues || !client.isSynced)
       return false;
     if (!server.isSaving) {
@@ -257,6 +265,14 @@ export class FairPlayManager {
     position: Float32Array,
     vehicle: Vehicle
   ): boolean {
+    if(typeof sequenceTime !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/fairplaymanager.ts=>checkVehicleSpeed] sequenceTime isn't of type number but of type ${typeof sequenceTime}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/fairplaymanager.ts=>checkVehicleSpeed] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
     if (client.isAdmin || !this.useFairPlay) return false;
     if (!server.isSaving) {
       const drift = Math.abs(sequenceTime - server.getServerTime());
@@ -315,6 +331,14 @@ export class FairPlayManager {
     hit: boolean,
     hitLocation: string
   ) {
+    if(typeof hit !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/managers/fairplaymanager.ts=>hitMissFairPlayCheck] hit isn't of type boolean but of type ${typeof hit}`);
+    }
+    
+    if(typeof hitLocation !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/fairplaymanager.ts=>hitMissFairPlayCheck] hitLocation isn't of type string but of type ${typeof hitLocation}`);
+    }
+    
     const weaponItem = client.character.getEquippedWeapon();
     if (
       !this.useFairPlay ||
@@ -392,6 +416,10 @@ export class FairPlayManager {
     hitReport: any,
     gameTime: number
   ): boolean {
+    if(typeof gameTime !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/fairplaymanager.ts=>validateProjectileHit] gameTime isn't of type number but of type ${typeof gameTime}`);
+    }
+    
     if (!this.fairPlayValues) return true;
     const message = `FairPlay: blocked incoming projectile from ${client.character.name}`,
       targetClient = server.getClientByCharId(entity.characterId);

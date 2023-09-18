@@ -123,6 +123,10 @@ export class Plant extends ItemObject {
     isInstant?: boolean
     /* eslint-enable @typescript-eslint/no-unused-vars */
   ) {
+    if(typeof isInstant !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/entities/plant.ts=>OnPlayerSelect] isInstant isn't of type boolean but of type ${typeof isInstant}`);
+    }
+    
     if (this.growState != 3) return;
     for (const a in server._constructionFoundations) {
       const foundation = server._constructionFoundations[a];

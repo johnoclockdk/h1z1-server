@@ -51,6 +51,10 @@ export abstract class BaseLootableEntity extends BaseFullCharacter {
     isInstant?: boolean
     /* eslint-enable @typescript-eslint/no-unused-vars */
   ): void {
+    if(typeof isInstant !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/entities/baselootableentity.ts=>OnPlayerSelect] isInstant isn't of type boolean but of type ${typeof isInstant}`);
+    }
+    
     if (client.character.characterId == this.mountedCharacter) {
       client.character.dismountContainer(server);
       delete this.mountedCharacter; // the check below wont fix container if characterId is the same

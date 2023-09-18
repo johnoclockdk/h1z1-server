@@ -75,6 +75,10 @@ export class LoginProtocol {
   }
 
   pack(packetName: string, object: any): Buffer | null {
+    if(typeof packetName !== 'string'){
+    console.warn(`[src/protocols/loginprotocol.ts=>pack] packetName isn't of type string but of type ${typeof packetName}`);
+    }
+    
     const packetType = this.loginPackets.PacketTypes[packetName];
     const packet = this.loginPackets.Packets[packetType];
     let payload;

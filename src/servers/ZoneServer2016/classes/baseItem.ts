@@ -42,6 +42,10 @@ export class BaseItem {
   }
 
   isValid(flag?: string): boolean {
+    if(typeof flag !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/classes/baseItem.ts=>isValid] flag isn't of type string but of type ${typeof flag}`);
+    }
+    
     if (flag) this.debugFlag = flag;
     if (this.stackCount <= 0) {
       console.error(

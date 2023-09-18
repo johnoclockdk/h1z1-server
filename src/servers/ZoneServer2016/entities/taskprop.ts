@@ -45,6 +45,10 @@ export class TaskProp extends BaseLightweightCharacter {
   }
 
   getRewardItemCount(itemId: number): number {
+    if(typeof itemId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/taskprop.ts=>getRewardItemCount] itemId isn't of type number but of type ${typeof itemId}`);
+    }
+    
     switch (itemId) {
       case Items.AMMO_45:
       case Items.AMMO_9MM:
@@ -139,6 +143,10 @@ export class TaskProp extends BaseLightweightCharacter {
     isInstant?: boolean
     /* eslint-enable @typescript-eslint/no-unused-vars */
   ) {
+    if(typeof isInstant !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/entities/taskprop.ts=>OnPlayerSelect] isInstant isn't of type boolean but of type ${typeof isInstant}`);
+    }
+    
     if (!this.requiredItemId) return;
     // return empty ones, need more info and time to get other quests working
     const removedItem = client.character.getItemById(this.requiredItemId);

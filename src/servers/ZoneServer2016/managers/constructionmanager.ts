@@ -111,6 +111,18 @@ export class ConstructionManager {
     position: Float32Array,
     itemDefinitionId: number
   ): boolean {
+    if(typeof parentObjectCharacterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>detectStackedPlacement] parentObjectCharacterId isn't of type string but of type ${typeof parentObjectCharacterId}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>detectStackedPlacement] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>detectStackedPlacement] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
     if (this.allowStackedPlacement) return false;
     if (
       !Number(parentObjectCharacterId) &&
@@ -190,6 +202,10 @@ export class ConstructionManager {
     item: BaseItem,
     position: Float32Array
   ): boolean {
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>detectStackedTamperPlacement] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
     if (item.itemDefinitionId == Items.GROUND_TAMPER) {
       // fix for tamper stacking
       let tampersInRadius = 0;
@@ -211,6 +227,10 @@ export class ConstructionManager {
     item: BaseItem,
     position: Float32Array
   ): boolean {
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>detectOutOfRange] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
     if (!this.placementRange) return false;
     if (
       item.itemDefinitionId != Items.GROUND_TAMPER &&
@@ -233,6 +253,18 @@ export class ConstructionManager {
     position: Float32Array,
     isInsidePermissionedFoundation: boolean
   ): boolean {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>detectSpawnPointPlacement] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>detectSpawnPointPlacement] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(typeof isInsidePermissionedFoundation !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>detectSpawnPointPlacement] isInsidePermissionedFoundation isn't of type boolean but of type ${typeof isInsidePermissionedFoundation}`);
+    }
+    
     if (client.isDebugMode) return false;
     if (!this.spawnPointBlockedPlacementRange) return false;
     let isInSpawnPoint = false;
@@ -256,6 +288,18 @@ export class ConstructionManager {
     client: Client,
     isInsidePermissionedFoundation: boolean
   ): boolean {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>detectVehicleSpawnPointPlacement] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>detectVehicleSpawnPointPlacement] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(typeof isInsidePermissionedFoundation !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>detectVehicleSpawnPointPlacement] isInsidePermissionedFoundation isn't of type boolean but of type ${typeof isInsidePermissionedFoundation}`);
+    }
+    
     if (client.isDebugMode) return false;
     if (!this.vehicleSpawnPointBlockedPlacementRange) return false;
     let isInVehicleSpawnPoint = false;
@@ -283,6 +327,10 @@ export class ConstructionManager {
     server: ZoneServer2016,
     position: Float32Array
   ): boolean {
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>detectOutOfBoundsPlacement] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
     if (this.allowOutOfBoundsPlacement) return false;
     let inMapBounds: boolean = false;
     server._spawnGrid.forEach((cell: SpawnCell) => {
@@ -307,6 +355,18 @@ export class ConstructionManager {
     client: Client,
     isInsidePermissionedFoundation: boolean
   ): boolean {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>detectPOIPlacement] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>detectPOIPlacement] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(typeof isInsidePermissionedFoundation !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>detectPOIPlacement] isInsidePermissionedFoundation isn't of type boolean but of type ${typeof isInsidePermissionedFoundation}`);
+    }
+    
     if (client.isDebugMode) return false;
     if (this.allowPOIPlacement) return false;
     if (this.overridePlacementItems.includes(itemDefinitionId)) return false;
@@ -342,6 +402,30 @@ export class ConstructionManager {
     parentObjectCharacterId: string,
     BuildingSlot: string
   ) {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placement] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
+    if(typeof modelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placement] modelId isn't of type number but of type ${typeof modelId}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placement] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(!(rotation instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placement] rotation isn't of type Float32Array but of type ${typeof rotation}`);
+    }
+    
+    if(typeof parentObjectCharacterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placement] parentObjectCharacterId isn't of type string but of type ${typeof parentObjectCharacterId}`);
+    }
+    
+    if(typeof BuildingSlot !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placement] BuildingSlot isn't of type string but of type ${typeof BuildingSlot}`);
+    }
+    
     const item = client.character.getItemById(itemDefinitionId);
     if (!item) {
       this.sendPlacementFinalize(server, client, 1);
@@ -626,6 +710,34 @@ export class ConstructionManager {
     BuildingSlot: string,
     freeplaceParentCharacterId?: string
   ): boolean {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>handleConstructionPlacement] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
+    if(typeof modelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>handleConstructionPlacement] modelId isn't of type number but of type ${typeof modelId}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>handleConstructionPlacement] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(!(rotation instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>handleConstructionPlacement] rotation isn't of type Float32Array but of type ${typeof rotation}`);
+    }
+    
+    if(typeof parentObjectCharacterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>handleConstructionPlacement] parentObjectCharacterId isn't of type string but of type ${typeof parentObjectCharacterId}`);
+    }
+    
+    if(typeof BuildingSlot !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>handleConstructionPlacement] BuildingSlot isn't of type string but of type ${typeof BuildingSlot}`);
+    }
+    
+    if(typeof freeplaceParentCharacterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>handleConstructionPlacement] freeplaceParentCharacterId isn't of type string but of type ${typeof freeplaceParentCharacterId}`);
+    }
+    
     switch (itemDefinitionId) {
       case Items.SNARE:
       case Items.PUNJI_STICKS:
@@ -827,6 +939,26 @@ export class ConstructionManager {
     parentObjectCharacterId: string,
     BuildingSlot: string
   ): boolean {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionShelter] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
+    if(typeof modelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionShelter] modelId isn't of type number but of type ${typeof modelId}`);
+    }
+    
+    if(!(rotation instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionShelter] rotation isn't of type Float32Array but of type ${typeof rotation}`);
+    }
+    
+    if(typeof parentObjectCharacterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionShelter] parentObjectCharacterId isn't of type string but of type ${typeof parentObjectCharacterId}`);
+    }
+    
+    if(typeof BuildingSlot !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionShelter] BuildingSlot isn't of type string but of type ${typeof BuildingSlot}`);
+    }
+    
     const parent =
       server._constructionFoundations[parentObjectCharacterId] ||
       server._constructionSimple[parentObjectCharacterId];
@@ -891,6 +1023,22 @@ export class ConstructionManager {
     parentObjectCharacterId: string,
     BuildingSlot: string
   ): boolean {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionWall] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
+    if(typeof modelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionWall] modelId isn't of type number but of type ${typeof modelId}`);
+    }
+    
+    if(typeof parentObjectCharacterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionWall] parentObjectCharacterId isn't of type string but of type ${typeof parentObjectCharacterId}`);
+    }
+    
+    if(typeof BuildingSlot !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionWall] BuildingSlot isn't of type string but of type ${typeof BuildingSlot}`);
+    }
+    
     const parent =
       server._constructionFoundations[parentObjectCharacterId] ||
       server._constructionSimple[parentObjectCharacterId];
@@ -971,6 +1119,22 @@ export class ConstructionManager {
     parentObjectCharacterId: string,
     BuildingSlot: string
   ): boolean {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionRamp] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
+    if(typeof modelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionRamp] modelId isn't of type number but of type ${typeof modelId}`);
+    }
+    
+    if(typeof parentObjectCharacterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionRamp] parentObjectCharacterId isn't of type string but of type ${typeof parentObjectCharacterId}`);
+    }
+    
+    if(typeof BuildingSlot !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionRamp] BuildingSlot isn't of type string but of type ${typeof BuildingSlot}`);
+    }
+    
     const parentFoundation =
       server._constructionFoundations[parentObjectCharacterId];
     if (!Number(parentObjectCharacterId) || !parentFoundation) {
@@ -1038,6 +1202,26 @@ export class ConstructionManager {
     parentObjectCharacterId: string,
     BuildingSlot: string
   ): boolean {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionStairs] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
+    if(typeof modelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionStairs] modelId isn't of type number but of type ${typeof modelId}`);
+    }
+    
+    if(!(rotation instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionStairs] rotation isn't of type Float32Array but of type ${typeof rotation}`);
+    }
+    
+    if(typeof parentObjectCharacterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionStairs] parentObjectCharacterId isn't of type string but of type ${typeof parentObjectCharacterId}`);
+    }
+    
+    if(typeof BuildingSlot !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionStairs] BuildingSlot isn't of type string but of type ${typeof BuildingSlot}`);
+    }
+    
     const parentFoundation =
       server._constructionFoundations[parentObjectCharacterId];
     if (!Number(parentObjectCharacterId) || !parentFoundation) {
@@ -1101,6 +1285,22 @@ export class ConstructionManager {
     parentObjectCharacterId: string,
     BuildingSlot: string
   ): boolean {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionDoor] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
+    if(typeof modelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionDoor] modelId isn't of type number but of type ${typeof modelId}`);
+    }
+    
+    if(typeof parentObjectCharacterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionDoor] parentObjectCharacterId isn't of type string but of type ${typeof parentObjectCharacterId}`);
+    }
+    
+    if(typeof BuildingSlot !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionDoor] BuildingSlot isn't of type string but of type ${typeof BuildingSlot}`);
+    }
+    
     const parent =
       server._constructionFoundations[parentObjectCharacterId] ||
       server._constructionSimple[parentObjectCharacterId];
@@ -1166,6 +1366,30 @@ export class ConstructionManager {
     parentObjectCharacterId: string,
     BuildingSlot?: string
   ): boolean {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionFoundation] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
+    if(typeof modelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionFoundation] modelId isn't of type number but of type ${typeof modelId}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionFoundation] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(!(rotation instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionFoundation] rotation isn't of type Float32Array but of type ${typeof rotation}`);
+    }
+    
+    if(typeof parentObjectCharacterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionFoundation] parentObjectCharacterId isn't of type string but of type ${typeof parentObjectCharacterId}`);
+    }
+    
+    if(typeof BuildingSlot !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeConstructionFoundation] BuildingSlot isn't of type string but of type ${typeof BuildingSlot}`);
+    }
+    
     if (
       itemDefinitionId == Items.FOUNDATION_EXPANSION &&
       (!parentObjectCharacterId || !BuildingSlot)
@@ -1263,6 +1487,22 @@ export class ConstructionManager {
     rotation: Float32Array,
     time: number
   ): boolean {
+    if(typeof modelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeTemporaryEntity] modelId isn't of type number but of type ${typeof modelId}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeTemporaryEntity] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(!(rotation instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeTemporaryEntity] rotation isn't of type Float32Array but of type ${typeof rotation}`);
+    }
+    
+    if(typeof time !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeTemporaryEntity] time isn't of type number but of type ${typeof time}`);
+    }
+    
     const characterId = server.generateGuid(),
       transientId = 1, // dont think its needed
       npc = new TemporaryEntity(
@@ -1285,6 +1525,22 @@ export class ConstructionManager {
     position: Float32Array,
     rotation: Float32Array
   ): boolean {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeTrap] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
+    if(typeof modelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeTrap] modelId isn't of type number but of type ${typeof modelId}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeTrap] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(!(rotation instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeTrap] rotation isn't of type Float32Array but of type ${typeof rotation}`);
+    }
+    
     const characterId = server.generateGuid(),
       transientId = 1, // dont think its needed here
       npc = new TrapEntity(
@@ -1308,6 +1564,18 @@ export class ConstructionManager {
     position: Float32Array,
     rotation: Float32Array
   ): boolean {
+    if(typeof modelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeExplosiveEntity] modelId isn't of type number but of type ${typeof modelId}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeExplosiveEntity] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(!(rotation instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeExplosiveEntity] rotation isn't of type Float32Array but of type ${typeof rotation}`);
+    }
+    
     const characterId = server.generateGuid(),
       transientId = 1, // dont think its needed
       npc = new ExplosiveEntity(
@@ -1346,6 +1614,26 @@ export class ConstructionManager {
     rotation: Float32Array,
     parentObjectCharacterId?: string
   ): boolean {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeLootableConstruction] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
+    if(typeof modelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeLootableConstruction] modelId isn't of type number but of type ${typeof modelId}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeLootableConstruction] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(!(rotation instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeLootableConstruction] rotation isn't of type Float32Array but of type ${typeof rotation}`);
+    }
+    
+    if(typeof parentObjectCharacterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeLootableConstruction] parentObjectCharacterId isn't of type string but of type ${typeof parentObjectCharacterId}`);
+    }
+    
     const characterId = server.generateGuid(),
       transientId = server.getTransientId(characterId);
     const obj = new LootableConstructionEntity(
@@ -1396,6 +1684,26 @@ export class ConstructionManager {
     rotation: Float32Array,
     parentObjectCharacterId?: string
   ): boolean {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeSmeltingEntity] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
+    if(typeof modelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeSmeltingEntity] modelId isn't of type number but of type ${typeof modelId}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeSmeltingEntity] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(!(rotation instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeSmeltingEntity] rotation isn't of type Float32Array but of type ${typeof rotation}`);
+    }
+    
+    if(typeof parentObjectCharacterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeSmeltingEntity] parentObjectCharacterId isn't of type string but of type ${typeof parentObjectCharacterId}`);
+    }
+    
     const characterId = server.generateGuid(),
       transientId = server.getTransientId(characterId);
     const obj = new LootableConstructionEntity(
@@ -1435,6 +1743,26 @@ export class ConstructionManager {
     rotation: Float32Array,
     parentObjectCharacterId?: string
   ): boolean {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeCollectingEntity] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
+    if(typeof modelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeCollectingEntity] modelId isn't of type number but of type ${typeof modelId}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeCollectingEntity] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(!(rotation instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeCollectingEntity] rotation isn't of type Float32Array but of type ${typeof rotation}`);
+    }
+    
+    if(typeof parentObjectCharacterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placeCollectingEntity] parentObjectCharacterId isn't of type string but of type ${typeof parentObjectCharacterId}`);
+    }
+    
     const characterId = server.generateGuid(),
       transientId = server.getTransientId(characterId);
     const obj = new LootableConstructionEntity(
@@ -1482,6 +1810,18 @@ export class ConstructionManager {
     position: Float32Array,
     rotation: Float32Array
   ): boolean {
+    if(typeof modelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placePlantingDiameter] modelId isn't of type number but of type ${typeof modelId}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placePlantingDiameter] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(!(rotation instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placePlantingDiameter] rotation isn't of type Float32Array but of type ${typeof rotation}`);
+    }
+    
     const characterId = server.generateGuid(),
       transientId = 1;
     const obj = new PlantingDiameter(
@@ -1509,6 +1849,30 @@ export class ConstructionManager {
     parentObjectCharacterId: string,
     itemDefinitionId: number
   ): boolean {
+    if(typeof modelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placePlantOnDiameter] modelId isn't of type number but of type ${typeof modelId}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placePlantOnDiameter] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(!(rotation instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placePlantOnDiameter] rotation isn't of type Float32Array but of type ${typeof rotation}`);
+    }
+    
+    if(typeof slot !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placePlantOnDiameter] slot isn't of type string but of type ${typeof slot}`);
+    }
+    
+    if(typeof parentObjectCharacterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placePlantOnDiameter] parentObjectCharacterId isn't of type string but of type ${typeof parentObjectCharacterId}`);
+    }
+    
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>placePlantOnDiameter] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
     const item = server.generateItem(itemDefinitionId);
     if (!item) return false;
     const characterId = server.generateGuid(),
@@ -1658,6 +2022,14 @@ export class ConstructionManager {
     constructionGuid: string,
     state: boolean
   ) {
+    if(typeof constructionGuid !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>constructionHidePlayer] constructionGuid isn't of type string but of type ${typeof constructionGuid}`);
+    }
+    
+    if(typeof state !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>constructionHidePlayer] state isn't of type boolean but of type ${typeof state}`);
+    }
+    
     if (state) {
       if (!client.character.isHidden) {
         client.character.isHidden = constructionGuid;
@@ -1756,6 +2128,10 @@ export class ConstructionManager {
     server: ZoneServer2016,
     tpDirection: number
   ) {
+    if(typeof tpDirection !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>recheckClientInsideShelter] tpDirection isn't of type number but of type ${typeof tpDirection}`);
+    }
+    
     for (const a in server._constructionSimple) {
       const simple = server._constructionSimple[a];
       const shelters = [
@@ -2012,6 +2388,10 @@ export class ConstructionManager {
     entity: ConstructionChildEntity | ConstructionDoor,
     hammerHit: number
   ): number {
+    if(typeof hammerHit !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>repairChildEntity] hammerHit isn't of type number but of type ${typeof hammerHit}`);
+    }
+    
     if (entity instanceof ConstructionChildEntity) {
       Object.values(entity.occupiedShelterSlots).forEach(
         (slot: ConstructionChildEntity) => {
@@ -2068,6 +2448,10 @@ export class ConstructionManager {
       | LootableConstructionEntity,
     amount: number
   ) {
+    if(typeof amount !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>repairConstruction] amount isn't of type number but of type ${typeof amount}`);
+    }
+    
     const damageInfo = {
       entity: "",
       damage: (amount *= -1)
@@ -2496,6 +2880,26 @@ export class ConstructionManager {
     entityPosition: Float32Array,
     source: string
   ) {
+    if(typeof constructionCharId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>checkConstructionDamage] constructionCharId isn't of type string but of type ${typeof constructionCharId}`);
+    }
+    
+    if(typeof damage !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>checkConstructionDamage] damage isn't of type number but of type ${typeof damage}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>checkConstructionDamage] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(!(entityPosition instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>checkConstructionDamage] entityPosition isn't of type Float32Array but of type ${typeof entityPosition}`);
+    }
+    
+    if(typeof source !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/constructionmanager.ts=>checkConstructionDamage] source isn't of type string but of type ${typeof source}`);
+    }
+    
     switch (source) {
       case "vehicle":
         damage /= 12;

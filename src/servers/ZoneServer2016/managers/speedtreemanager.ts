@@ -45,6 +45,14 @@ export class SpeedTreeManager {
   }
 
   use(server: ZoneServer2016, client: Client, objectId: number, name: string) {
+    if(typeof objectId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/speedtreemanager.ts=>use] objectId isn't of type number but of type ${typeof objectId}`);
+    }
+    
+    if(typeof name !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/speedtreemanager.ts=>use] name isn't of type string but of type ${typeof name}`);
+    }
+    
     const speedtreeDestroyed = this._speedTrees[objectId];
     let destroy = false;
     let count = 1;
@@ -117,6 +125,14 @@ export class SpeedTreeManager {
   }
 
   destroy(server: ZoneServer2016, objectId: number, name: string) {
+    if(typeof objectId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/speedtreemanager.ts=>destroy] objectId isn't of type number but of type ${typeof objectId}`);
+    }
+    
+    if(typeof name !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/speedtreemanager.ts=>destroy] name isn't of type string but of type ${typeof name}`);
+    }
+    
     server.sendDataToAll("DtoStateChange", {
       objectId: objectId,
       modelName: name.concat(".Stump"),

@@ -7,6 +7,10 @@
 // ======================================================================
 
 function getRenderDistance(itemDefinitionId: number) {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionchildentity.ts=>getRenderDistance] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
   let range: number = 0;
   switch (itemDefinitionId) {
     case Items.SHACK: // metal shack
@@ -63,6 +67,10 @@ import {
 import { ConstructionDoor } from "./constructiondoor";
 import { LootableConstructionEntity } from "./lootableconstructionentity";
 function getDamageRange(definitionId: number): number {
+    if(typeof definitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionchildentity.ts=>getDamageRange] definitionId isn't of type number but of type ${typeof definitionId}`);
+    }
+    
   switch (definitionId) {
     case Items.METAL_WALL:
     case Items.METAL_WALL_UPPER:
@@ -247,6 +255,10 @@ export class ConstructionChildEntity extends BaseLightweightCharacter {
   }
 
   isSlotOccupied(slotMap: OccupiedSlotMap, slot: number): boolean {
+    if(typeof slot !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionchildentity.ts=>isSlotOccupied] slot isn't of type number but of type ${typeof slot}`);
+    }
+    
     return !!slotMap[slot];
   }
 
@@ -265,6 +277,14 @@ export class ConstructionChildEntity extends BaseLightweightCharacter {
     slotMap: ConstructionSlotPositionMap,
     itemDefinitionId: number
   ) {
+    if(typeof slot !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionchildentity.ts=>isSlotValid] slot isn't of type number but of type ${typeof slot}`);
+    }
+    
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionchildentity.ts=>isSlotValid] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
     if (itemDefinitionId == Items.METAL_WALL_UPPER) {
       slot = 1;
     }
@@ -289,10 +309,18 @@ export class ConstructionChildEntity extends BaseLightweightCharacter {
   }
 
   clearSlot(slot: number, occupiedSlots: OccupiedSlotMap) {
+    if(typeof slot !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionchildentity.ts=>clearSlot] slot isn't of type number but of type ${typeof slot}`);
+    }
+    
     delete occupiedSlots[slot];
   }
 
   isWallSlotValid(buildingSlot: number | string, itemDefinitionId: number) {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionchildentity.ts=>isWallSlotValid] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
     let slot = 0;
     if (typeof buildingSlot == "string") {
       slot = getConstructionSlotId(buildingSlot);
@@ -337,6 +365,10 @@ export class ConstructionChildEntity extends BaseLightweightCharacter {
   }
 
   isShelterSlotValid(buildingSlot: number | string, itemDefinitionId: number) {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionchildentity.ts=>isShelterSlotValid] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
     let slot = 0;
     if (typeof buildingSlot == "string") {
       slot = getConstructionSlotId(buildingSlot);
@@ -399,6 +431,10 @@ export class ConstructionChildEntity extends BaseLightweightCharacter {
   }
 
   isInside(position: Float32Array) {
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionchildentity.ts=>isInside] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
     if (!this.bounds) {
       switch (this.itemDefinitionId) {
         case Items.STRUCTURE_STAIRS:
@@ -430,6 +466,10 @@ export class ConstructionChildEntity extends BaseLightweightCharacter {
   }
 
   isOn(position: Float32Array) {
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionchildentity.ts=>isOn] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
     if (!this.bounds) {
       switch (this.itemDefinitionId) {
         case Items.STRUCTURE_STAIRS:
@@ -556,6 +596,10 @@ export class ConstructionChildEntity extends BaseLightweightCharacter {
     characterId: string,
     permission: ConstructionPermissionIds
   ) {
+    if(typeof characterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionchildentity.ts=>getHasPermission] characterId isn't of type string but of type ${typeof characterId}`);
+    }
+    
     return (
       this.getParentFoundation(server)?.getHasPermission(
         server,
@@ -589,6 +633,10 @@ export class ConstructionChildEntity extends BaseLightweightCharacter {
     isInstant?: boolean
     /* eslint-enable @typescript-eslint/no-unused-vars */
   ) {
+    if(typeof isInstant !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/entities/constructionchildentity.ts=>OnPlayerSelect] isInstant isn't of type boolean but of type ${typeof isInstant}`);
+    }
+    
     if (this.canUndoPlacement(server, client)) {
       this.destroy(server);
       client.character.lootItem(

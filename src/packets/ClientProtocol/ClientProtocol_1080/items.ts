@@ -15,6 +15,10 @@ import { h1z1Buffer } from "h1z1-dataschema";
 import { PacketStructures } from "types/packetStructure";
 
 export function parseItemRequestSubData(data: h1z1Buffer, offset: number) {
+    if(typeof offset !== 'number'){
+    console.warn(`[src/packets/ClientProtocol/ClientProtocol_1080/items.ts=>parseItemRequestSubData] offset isn't of type number but of type ${typeof offset}`);
+    }
+    
   const obj: any = {},
     startOffset = offset;
   obj["unknownBoolean1"] = data.readUInt8(offset);

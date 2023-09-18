@@ -101,6 +101,10 @@ export class GatewayServer extends EventEmitter {
     tunnelData: Buffer,
     unbuffered: boolean
   ) {
+    if(typeof unbuffered !== 'boolean'){
+    console.warn(`[src/servers/GatewayServer/gatewayserver.ts=>_sentTunnelData] unbuffered isn't of type boolean but of type ${typeof unbuffered}`);
+    }
+    
     debug("Sending tunnel data to client");
     const data = this._protocol.pack_tunnel_data_packet_for_client(
       tunnelData,

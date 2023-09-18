@@ -16,6 +16,10 @@ import { ZoneServer2016 } from "../zoneserver";
 import { ZoneClient2016 } from "../classes/zoneclient";
 
 function getRenderDistance(actorModelId: number) {
+    if(typeof actorModelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/entities/baseentity.ts=>getRenderDistance] actorModelId isn't of type number but of type ${typeof actorModelId}`);
+    }
+    
   let range: number = 0;
   switch (actorModelId) {
     case 9115: // tamper
@@ -92,6 +96,10 @@ export abstract class BaseEntity {
     client: ZoneClient2016,
     isInstant?: boolean
   ) {
+    if(typeof isInstant !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/entities/baseentity.ts=>OnPlayerSelect] isInstant isn't of type boolean but of type ${typeof isInstant}`);
+    }
+    
     // default: do nothing
   }
 

@@ -55,6 +55,10 @@ export function readPacketType(data: Buffer, packets: any) {
 }
 
 export function writePacketType(packetType: number) {
+    if(typeof packetType !== 'number'){
+    console.warn(`[src/packets/ClientProtocol/ClientProtocol_1080/shared.ts=>writePacketType] packetType isn't of type number but of type ${typeof packetType}`);
+    }
+    
   const packetTypeBytes = getPacketTypeBytes(packetType);
   const data = Buffer.allocUnsafe(packetTypeBytes.length);
   for (let i = 0; i < packetTypeBytes.length; i++) {
@@ -67,6 +71,10 @@ export function readUnsignedIntWith2bitLengthValue(
   data: Buffer,
   offset: number
 ) {
+    if(typeof offset !== 'number'){
+    console.warn(`[src/packets/ClientProtocol/ClientProtocol_1080/shared.ts=>readUnsignedIntWith2bitLengthValue] offset isn't of type number but of type ${typeof offset}`);
+    }
+    
   let value = data.readUInt8(offset);
   const n = value & 3;
   for (let i = 0; i < n; i++) {
@@ -80,6 +88,10 @@ export function readUnsignedIntWith2bitLengthValue(
 }
 
 export function packUnsignedIntWith2bitLengthValue(value: number) {
+    if(typeof value !== 'number'){
+    console.warn(`[src/packets/ClientProtocol/ClientProtocol_1080/shared.ts=>packUnsignedIntWith2bitLengthValue] value isn't of type number but of type ${typeof value}`);
+    }
+    
   value = value << 2;
   let n = 0;
   if (value > 0xffffff) {
@@ -96,6 +108,10 @@ export function packUnsignedIntWith2bitLengthValue(value: number) {
 }
 
 export function readSignedIntWith2bitLengthValue(data: Buffer, offset: number) {
+    if(typeof offset !== 'number'){
+    console.warn(`[src/packets/ClientProtocol/ClientProtocol_1080/shared.ts=>readSignedIntWith2bitLengthValue] offset isn't of type number but of type ${typeof offset}`);
+    }
+    
   let value = data.readUInt8(offset);
   const sign = value & 1;
   const n = (value >> 1) & 3;
@@ -113,6 +129,10 @@ export function readSignedIntWith2bitLengthValue(data: Buffer, offset: number) {
 }
 
 export function packSignedIntWith2bitLengthValue(value: number): Buffer {
+    if(typeof value !== 'number'){
+    console.warn(`[src/packets/ClientProtocol/ClientProtocol_1080/shared.ts=>packSignedIntWith2bitLengthValue] value isn't of type number but of type ${typeof value}`);
+    }
+    
   value = Math.round(value);
   const sign = value < 0 ? 1 : 0;
   value = sign ? -value : value;
@@ -133,6 +153,10 @@ export function packSignedIntWith2bitLengthValue(value: number): Buffer {
 }
 
 export function readPositionUpdateData(data: Buffer, offset: number) {
+    if(typeof offset !== 'number'){
+    console.warn(`[src/packets/ClientProtocol/ClientProtocol_1080/shared.ts=>readPositionUpdateData] offset isn't of type number but of type ${typeof offset}`);
+    }
+    
   const obj: any = {},
     startOffset = offset;
   obj["flags"] = data.readUInt16LE(offset);
@@ -734,6 +758,10 @@ export const vehicleReferenceSchema = [
 ];
 
 export function parseVehicleReferenceData(data: Buffer, offset: number) {
+    if(typeof offset !== 'number'){
+    console.warn(`[src/packets/ClientProtocol/ClientProtocol_1080/shared.ts=>parseVehicleReferenceData] offset isn't of type number but of type ${typeof offset}`);
+    }
+    
   const dataLength = data.readUInt32LE(offset);
   offset += 4;
   data = data.slice(offset, offset + dataLength);

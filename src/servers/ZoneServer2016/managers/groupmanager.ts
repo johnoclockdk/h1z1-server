@@ -38,6 +38,10 @@ export class GroupManager {
     packetName: h1z1PacketsType2016,
     obj: zone2016packets
   ) {
+    if(typeof groupId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/groupmanager.ts=>sendDataToAllOthersInGroup] groupId isn't of type number but of type ${typeof groupId}`);
+    }
+    
     if (!groupId) return;
     const group = this.groups[groupId];
     if (!group) return;
@@ -118,6 +122,14 @@ export class GroupManager {
   }
 
   sendAlertToGroup(server: ZoneServer2016, groupId: number, message: string) {
+    if(typeof groupId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/groupmanager.ts=>sendAlertToGroup] groupId isn't of type number but of type ${typeof groupId}`);
+    }
+    
+    if(typeof message !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/groupmanager.ts=>sendAlertToGroup] message isn't of type string but of type ${typeof message}`);
+    }
+    
     if (!this.groups[groupId] || message == "") return;
 
     for (const characterId of this.groups[groupId].members) {
@@ -133,6 +145,14 @@ export class GroupManager {
     groupId: number,
     message: string
   ) {
+    if(typeof groupId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/groupmanager.ts=>sendAlertToAllOthersInGroup] groupId isn't of type number but of type ${typeof groupId}`);
+    }
+    
+    if(typeof message !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/groupmanager.ts=>sendAlertToAllOthersInGroup] message isn't of type string but of type ${typeof message}`);
+    }
+    
     if (!this.groups[groupId] || message == "") return;
 
     for (const characterId of this.groups[groupId].members) {
@@ -160,6 +180,10 @@ export class GroupManager {
   }
 
   disbandGroup(server: ZoneServer2016, groupId: number) {
+    if(typeof groupId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/groupmanager.ts=>disbandGroup] groupId isn't of type number but of type ${typeof groupId}`);
+    }
+    
     const group = this.groups[groupId];
     if (!group) {
       return;
@@ -237,6 +261,10 @@ export class GroupManager {
     target: Client,
     joinState: boolean
   ) {
+    if(typeof joinState !== 'boolean'){
+    console.warn(`[src/servers/ZoneServer2016/managers/groupmanager.ts=>handleGroupJoin] joinState isn't of type boolean but of type ${typeof joinState}`);
+    }
+    
     const pendingInvite = this.pendingInvites[target.character.characterId];
     if (pendingInvite != source.character.groupId) {
       server.sendAlert(target, "You have no pending invites!");

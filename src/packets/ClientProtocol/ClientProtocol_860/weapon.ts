@@ -197,6 +197,10 @@ const [weaponPacketTypes, weaponPacketDescriptors] =
   PacketTableBuild(weaponPackets);
 
 function parseMultiWeaponPacket(data: Buffer, offset: number) {
+    if(typeof offset !== 'number'){
+    console.warn(`[src/packets/ClientProtocol/ClientProtocol_860/weapon.ts=>parseMultiWeaponPacket] offset isn't of type number but of type ${typeof offset}`);
+    }
+    
   const startOffset = offset,
     packets = [];
   const n = data.readUInt32LE(offset);
@@ -222,6 +226,10 @@ function packMultiWeaponPacket() {
 }
 
 export function parseWeaponPacket(data: Buffer, offset: number) {
+    if(typeof offset !== 'number'){
+    console.warn(`[src/packets/ClientProtocol/ClientProtocol_860/weapon.ts=>parseWeaponPacket] offset isn't of type number but of type ${typeof offset}`);
+    }
+    
   const obj: any = {};
 
   obj.gameTime = data.readUInt32LE(offset);

@@ -19,6 +19,10 @@ import { BaseEntity } from "../entities/baseentity";
 import { ZoneClient2016 } from "./zoneclient";
 
 function getAllowedFuel(itemDefinitionId: number): number[] {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/classes/smeltingentity.ts=>getAllowedFuel] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
   switch (itemDefinitionId) {
     case Items.FURNACE:
       return [

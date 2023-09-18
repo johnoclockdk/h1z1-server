@@ -61,6 +61,18 @@ function createEntity(
   zoneId: number,
   dictionnary: any
 ): void {
+    if(typeof modelID !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/workers/createBaseEntities.ts=>createEntity] modelID isn't of type number but of type ${typeof modelID}`);
+    }
+    
+    if(typeof texture !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/workers/createBaseEntities.ts=>createEntity] texture isn't of type string but of type ${typeof texture}`);
+    }
+    
+    if(typeof zoneId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/workers/createBaseEntities.ts=>createEntity] zoneId isn't of type number but of type ${typeof zoneId}`);
+    }
+    
   let stringNameId = 0;
   modelToName.forEach((spawnername: any) => {
     if (modelID === spawnername.modelId) {
@@ -101,6 +113,22 @@ function createDTO(
   renderDistance: number,
   dictionnary: any
 ): void {
+    if(typeof modelID !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/workers/createBaseEntities.ts=>createDTO] modelID isn't of type number but of type ${typeof modelID}`);
+    }
+    
+    if(typeof extraModel !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/workers/createBaseEntities.ts=>createDTO] extraModel isn't of type string but of type ${typeof extraModel}`);
+    }
+    
+    if(typeof zoneId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/workers/createBaseEntities.ts=>createDTO] zoneId isn't of type number but of type ${typeof zoneId}`);
+    }
+    
+    if(typeof renderDistance !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/workers/createBaseEntities.ts=>createDTO] renderDistance isn't of type number but of type ${typeof renderDistance}`);
+    }
+    
   let stringNameId = 0;
   modelToName.forEach((spawnername: any) => {
     if (modelID === spawnername.modelId) {
@@ -143,6 +171,18 @@ function createDoor(
   zoneId: number,
   dictionnary: any
 ): void {
+    if(typeof modelID !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/workers/createBaseEntities.ts=>createDoor] modelID isn't of type number but of type ${typeof modelID}`);
+    }
+    
+    if(typeof texture !== 'string'){
+    console.warn(`[src/servers/ZoneServer2015/workers/createBaseEntities.ts=>createDoor] texture isn't of type string but of type ${typeof texture}`);
+    }
+    
+    if(typeof zoneId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2015/workers/createBaseEntities.ts=>createDoor] zoneId isn't of type number but of type ${typeof zoneId}`);
+    }
+    
   let stringNameId = 0;
   modelToName.forEach((spawnername: any) => {
     if (modelID === spawnername.modelId) {

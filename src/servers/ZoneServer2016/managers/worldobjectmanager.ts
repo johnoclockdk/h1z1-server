@@ -61,6 +61,10 @@ import { Destroyable } from "../entities/destroyable";
 const debug = require("debug")("ZoneServer");
 
 function getRandomSkin(itemDefinitionId: number) {
+    if(typeof itemDefinitionId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worldobjectmanager.ts=>getRandomSkin] itemDefinitionId isn't of type number but of type ${typeof itemDefinitionId}`);
+    }
+    
   let itemDefId = 0;
   let arr: any[] = [];
   switch (itemDefinitionId) {
@@ -257,6 +261,18 @@ export class WorldObjectManager {
     rotation: Float32Array,
     spawnerId: number = 0
   ) {
+    if(typeof modelId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worldobjectmanager.ts=>createZombie] modelId isn't of type number but of type ${typeof modelId}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/worldobjectmanager.ts=>createZombie] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(!(rotation instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/worldobjectmanager.ts=>createZombie] rotation isn't of type Float32Array but of type ${typeof rotation}`);
+    }
+    
     const characterId = generateRandomGuid();
     const zombie = new Zombie(
       characterId,
@@ -279,6 +295,14 @@ export class WorldObjectManager {
     rotation: Float32Array,
     itemSpawnerId: number = -1
   ): ItemObject | undefined {
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/worldobjectmanager.ts=>createLootEntity] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(!(rotation instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/worldobjectmanager.ts=>createLootEntity] rotation isn't of type Float32Array but of type ${typeof rotation}`);
+    }
+    
     if (!item) {
       debug(`[ERROR] Tried to createLootEntity with invalid item object`);
       return;
@@ -348,6 +372,10 @@ export class WorldObjectManager {
   }
 
   createAirdropContainer(server: ZoneServer2016, pos: Float32Array) {
+    if(!(pos instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/worldobjectmanager.ts=>createAirdropContainer] pos isn't of type Float32Array but of type ${typeof pos}`);
+    }
+    
     const airdropTypes: string[] = [
       "Farmer",
       "Demolitioner",
@@ -563,6 +591,26 @@ export class WorldObjectManager {
     scale: Float32Array,
     spawnerId: number
   ) {
+    if(typeof modelID !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worldobjectmanager.ts=>createDoor] modelID isn't of type number but of type ${typeof modelID}`);
+    }
+    
+    if(!(position instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/worldobjectmanager.ts=>createDoor] position isn't of type Float32Array but of type ${typeof position}`);
+    }
+    
+    if(!(rotation instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/worldobjectmanager.ts=>createDoor] rotation isn't of type Float32Array but of type ${typeof rotation}`);
+    }
+    
+    if(!(scale instanceof Float32Array)){
+    console.warn(`[src/servers/ZoneServer2016/managers/worldobjectmanager.ts=>createDoor] scale isn't of type Float32Array but of type ${typeof scale}`);
+    }
+    
+    if(typeof spawnerId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worldobjectmanager.ts=>createDoor] spawnerId isn't of type number but of type ${typeof spawnerId}`);
+    }
+    
     const characterId = generateRandomGuid();
     server._doors[characterId] = new DoorEntity(
       characterId,
@@ -604,6 +652,10 @@ export class WorldObjectManager {
     percentage: number,
     item: Items
   ) {
+    if(typeof percentage !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worldobjectmanager.ts=>setSpawnchance] percentage isn't of type number but of type ${typeof percentage}`);
+    }
+    
     if (percentage <= 0) return false;
     if (percentage >= 100) return true;
 

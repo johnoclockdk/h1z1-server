@@ -153,6 +153,10 @@ export class WorldDataManager {
   nextSaveTime: number = Date.now() + this.saveTimeInterval;*/
 
   static async getDatabase(mongoAddress: string) {
+    if(typeof mongoAddress !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>getDatabase] mongoAddress isn't of type string but of type ${typeof mongoAddress}`);
+    }
+    
     const mongoClient = new MongoClient(mongoAddress, {
       maxPoolSize: 100
     });
@@ -169,6 +173,14 @@ export class WorldDataManager {
   }
 
   async initialize(worldId: number, mongoAddress: string) {
+    if(typeof worldId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>initialize] worldId isn't of type number but of type ${typeof worldId}`);
+    }
+    
+    if(typeof mongoAddress !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>initialize] mongoAddress isn't of type string but of type ${typeof mongoAddress}`);
+    }
+    
     this._soloMode = !mongoAddress;
     this._worldId = worldId;
     if (!this._soloMode) {
@@ -177,6 +189,10 @@ export class WorldDataManager {
   }
 
   async insertWorld(lastItemGuid: bigint) {
+    if(typeof lastItemGuid !== 'bigint'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>insertWorld] lastItemGuid isn't of type bigint but of type ${typeof lastItemGuid}`);
+    }
+    
     if (this._soloMode) return;
     if (!this._worldId) {
       const worldCount: number =
@@ -263,6 +279,10 @@ export class WorldDataManager {
   //#region DATA GETTER HELPER FUNCTIONS
 
   static getBaseSaveData(serverId: number): BaseSaveData {
+    if(typeof serverId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>getBaseSaveData] serverId isn't of type number but of type ${typeof serverId}`);
+    }
+    
     return {
       serverId: serverId
     };
@@ -289,6 +309,10 @@ export class WorldDataManager {
     entity: BaseEntity,
     serverId: number
   ): BaseFullEntitySaveData {
+    if(typeof serverId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>getBaseFullEntitySaveData] serverId isn't of type number but of type ${typeof serverId}`);
+    }
+    
     return {
       ...this.getBaseEntityUpdateSaveData(entity),
       ...this.getBaseSaveData(serverId),
@@ -343,6 +367,10 @@ export class WorldDataManager {
     entity: BaseFullCharacter,
     worldSaveVersion: number
   ): BaseFullCharacterUpdateSaveData {
+    if(typeof worldSaveVersion !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>getBaseFullCharacterUpdateSaveData] worldSaveVersion isn't of type number but of type ${typeof worldSaveVersion}`);
+    }
+    
     const loadout: { [loadoutSlotId: number]: LoadoutItemSaveData } = {},
       containers: { [loadoutSlotId: number]: LoadoutContainerSaveData } = {};
     Object.values(entity._loadout).forEach((item) => {
@@ -370,6 +398,10 @@ export class WorldDataManager {
   //#region SERVER DATA
 
   async getServerData(serverId: number): Promise<ServerSaveData | undefined> {
+    if(typeof serverId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>getServerData] serverId isn't of type number but of type ${typeof serverId}`);
+    }
+    
     let serverData: ServerSaveData;
     if (this._soloMode) {
       serverData = require(`${this._appDataFolder}/worlddata/world.json`);
@@ -388,6 +420,10 @@ export class WorldDataManager {
   }
 
   private async saveServerData(lastItemGuid: bigint) {
+    if(typeof lastItemGuid !== 'bigint'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>saveServerData] lastItemGuid isn't of type bigint but of type ${typeof lastItemGuid}`);
+    }
+    
     const saveData: ServerSaveData = {
       serverId: this._worldId,
       lastItemGuid: toBigHex(lastItemGuid),
@@ -417,6 +453,10 @@ export class WorldDataManager {
   async fetchCharacterData(
     characterId: string
   ): Promise<FullCharacterSaveData> {
+    if(typeof characterId !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>fetchCharacterData] characterId isn't of type string but of type ${typeof characterId}`);
+    }
+    
     let savedCharacter: FullCharacterSaveData;
     if (this._soloMode) {
       delete require.cache[
@@ -470,6 +510,10 @@ export class WorldDataManager {
     characters: Character2016[],
     worldId: number
   ) {
+    if(typeof worldId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>convertCharactersToSaveData] worldId isn't of type number but of type ${typeof worldId}`);
+    }
+    
     const charactersSaveData: CharacterUpdateSaveData[] = [];
     for (let i = 0; i < characters.length; i++) {
       const character = characters[i];
@@ -482,6 +526,10 @@ export class WorldDataManager {
   }
 
   static convertVehiclesToSaveData(characters: Vehicle2016[], worldId: number) {
+    if(typeof worldId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>convertVehiclesToSaveData] worldId isn't of type number but of type ${typeof worldId}`);
+    }
+    
     const vehiclesSaveData: FullVehicleSaveData[] = [];
     for (let i = 0; i < characters.length; i++) {
       const vehicle = characters[i];
@@ -494,6 +542,10 @@ export class WorldDataManager {
   }
 
   static convertToVehicleSaveData(vehicle: Vehicle2016, worldId: number) {
+    if(typeof worldId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>convertToVehicleSaveData] worldId isn't of type number but of type ${typeof worldId}`);
+    }
+    
     const saveData: FullVehicleSaveData = {
       ...WorldDataManager.getBaseFullCharacterUpdateSaveData(vehicle, worldId),
       vehicleId: vehicle.vehicleId,
@@ -507,6 +559,10 @@ export class WorldDataManager {
   }
 
   static convertToCharacterSaveData(character: Character2016, worldId: number) {
+    if(typeof worldId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>convertToCharacterSaveData] worldId isn't of type number but of type ${typeof worldId}`);
+    }
+    
     const saveData: CharacterUpdateSaveData = {
       ...WorldDataManager.getBaseFullCharacterUpdateSaveData(
         character,
@@ -524,6 +580,10 @@ export class WorldDataManager {
     characterSaveData: CharacterUpdateSaveData,
     lastItemGuid?: bigint
   ) {
+    if(typeof lastItemGuid !== 'bigint'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>saveCharacterData] lastItemGuid isn't of type bigint but of type ${typeof lastItemGuid}`);
+    }
+    
     /* 
       lastItemGuid MUST be saved whenever a character is saved (a character is saved on logout)
       in case of a crash so that a player can't end up with an item in their inventory with an
@@ -875,6 +935,10 @@ export class WorldDataManager {
     entity: ConstructionEntity,
     serverId: number
   ): BaseConstructionSaveData {
+    if(typeof serverId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>getBaseConstructionSaveData] serverId isn't of type number but of type ${typeof serverId}`);
+    }
+    
     return {
       ...this.getBaseFullEntitySaveData(entity, serverId),
       health: entity.health,
@@ -889,6 +953,10 @@ export class WorldDataManager {
     entity: ConstructionDoor,
     serverId: number
   ): ConstructionDoorSaveData {
+    if(typeof serverId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>getConstructionDoorSaveData] serverId isn't of type number but of type ${typeof serverId}`);
+    }
+    
     return {
       ...this.getBaseConstructionSaveData(entity, serverId),
       ownerCharacterId: entity.ownerCharacterId,
@@ -902,6 +970,10 @@ export class WorldDataManager {
     entity: LootableConstructionEntity,
     serverId: number
   ): LootableConstructionSaveData {
+    if(typeof serverId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>getLootableConstructionSaveData] serverId isn't of type number but of type ${typeof serverId}`);
+    }
+    
     return {
       ...this.getBaseConstructionSaveData(entity, serverId),
       container: entity.getContainer(),
@@ -913,6 +985,10 @@ export class WorldDataManager {
     entity: ConstructionChildEntity,
     serverId: number
   ): ConstructionChildSaveData {
+    if(typeof serverId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>getConstructionChildSaveData] serverId isn't of type number but of type ${typeof serverId}`);
+    }
+    
     const wallSlots: {
         [slot: number]: ConstructionChildSaveData | ConstructionDoorSaveData;
       } = {},
@@ -976,6 +1052,10 @@ export class WorldDataManager {
     entity: ConstructionParentEntity,
     serverId: number
   ): ConstructionParentSaveData {
+    if(typeof serverId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>getConstructionParentSaveData] serverId isn't of type number but of type ${typeof serverId}`);
+    }
+    
     const expansionSlots: { [slot: number]: ConstructionParentSaveData } = {},
       rampSlots: { [slot: number]: ConstructionChildSaveData } = {};
     Object.values(entity.occupiedExpansionSlots).forEach((expansion) => {
@@ -1030,6 +1110,10 @@ export class WorldDataManager {
   }
 
   static getPlantSaveData(entity: Plant, serverId: number): PlantSaveData {
+    if(typeof serverId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>getPlantSaveData] serverId isn't of type number but of type ${typeof serverId}`);
+    }
+    
     return {
       ...this.getBaseFullEntitySaveData(entity, serverId),
       growState: entity.growState,
@@ -1044,6 +1128,10 @@ export class WorldDataManager {
     entity: PlantingDiameter,
     serverId: number
   ): PlantingDiameterSaveData {
+    if(typeof serverId !== 'number'){
+    console.warn(`[src/servers/ZoneServer2016/managers/worlddatamanager.ts=>getPlantingDiameterSaveData] serverId isn't of type number but of type ${typeof serverId}`);
+    }
+    
     const slots: { [id: string]: PlantSaveData } = {};
     Object.values(entity.seedSlots).forEach((plant) => {
       slots[plant.slot] = this.getPlantSaveData(plant, serverId);

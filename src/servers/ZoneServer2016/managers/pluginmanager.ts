@@ -47,6 +47,10 @@ export abstract class BasePlugin {
  * @returns A boolean indicating whether the folder exists.
  */
 function folderExists(path: string): boolean {
+    if(typeof path !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/pluginmanager.ts=>folderExists] path isn't of type string but of type ${typeof path}`);
+    }
+    
   // shoutout chatGPT
   try {
     const stats = fs.statSync(path);
@@ -69,6 +73,14 @@ function folderExists(path: string): boolean {
  * @returns The path of the found folder, or null if not found.
  */
 function searchFolder(directory: string, folderName: string): string | null {
+    if(typeof directory !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/pluginmanager.ts=>searchFolder] directory isn't of type string but of type ${typeof directory}`);
+    }
+    
+    if(typeof folderName !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/pluginmanager.ts=>searchFolder] folderName isn't of type string but of type ${typeof folderName}`);
+    }
+    
   // shoutout chatGPT
   const files = fs.readdirSync(directory);
 
@@ -103,6 +115,18 @@ function traverseAndReplace(
   searchString: string,
   replaceString: string
 ): void {
+    if(typeof directory !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/pluginmanager.ts=>traverseAndReplace] directory isn't of type string but of type ${typeof directory}`);
+    }
+    
+    if(typeof searchString !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/pluginmanager.ts=>traverseAndReplace] searchString isn't of type string but of type ${typeof searchString}`);
+    }
+    
+    if(typeof replaceString !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/pluginmanager.ts=>traverseAndReplace] replaceString isn't of type string but of type ${typeof replaceString}`);
+    }
+    
   // shoutout chatGPT
   const files = fs.readdirSync(directory);
   files.forEach((file) => {
@@ -128,6 +152,18 @@ function replaceInFile(
   searchString: string,
   replaceString: string
 ): void {
+    if(typeof filePath !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/pluginmanager.ts=>replaceInFile] filePath isn't of type string but of type ${typeof filePath}`);
+    }
+    
+    if(typeof searchString !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/pluginmanager.ts=>replaceInFile] searchString isn't of type string but of type ${typeof searchString}`);
+    }
+    
+    if(typeof replaceString !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/pluginmanager.ts=>replaceInFile] replaceString isn't of type string but of type ${typeof replaceString}`);
+    }
+    
   // shoutout chatGPT
   const content = fs.readFileSync(filePath, "utf8"),
     replacedContent = content.replace(
@@ -163,6 +199,10 @@ export class PluginManager {
    * @returns An array of dependencies.
    */
   private getDependencies(projectPath: string): string[] {
+    if(typeof projectPath !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/pluginmanager.ts=>getDependencies] projectPath isn't of type string but of type ${typeof projectPath}`);
+    }
+    
     // shoutout chatGPT
 
     const packageJsonPath = path.join(
@@ -185,6 +225,10 @@ export class PluginManager {
     pluginPath: string,
     dependencies: string[]
   ): void {
+    if(typeof pluginPath !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/pluginmanager.ts=>installDependencies] pluginPath isn't of type string but of type ${typeof pluginPath}`);
+    }
+    
     // shoutout chatGPT
 
     if (dependencies.length === 0) {
@@ -213,6 +257,10 @@ export class PluginManager {
    * @returns A promise that resolves when the plugin is loaded.
    */
   private async loadPlugin(pluginPath: string) {
+    if(typeof pluginPath !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/pluginmanager.ts=>loadPlugin] pluginPath isn't of type string but of type ${typeof pluginPath}`);
+    }
+    
     const runPath = path.join(this.pluginsDir, pluginPath, "plugin.js");
 
     if (!folderExists(path.join(this.pluginsDir, pluginPath, "node_modules"))) {
@@ -362,6 +410,10 @@ export class PluginManager {
     hook: (...args: any[]) => boolean | void,
     options: { callBefore: boolean; callAfter: boolean }
   ) {
+    if(typeof methodName !== 'string'){
+    console.warn(`[src/servers/ZoneServer2016/managers/pluginmanager.ts=>hookMethod] methodName isn't of type string but of type ${typeof methodName}`);
+    }
+    
     const originalFunction = thisArg[methodName];
 
     if (!originalFunction) {

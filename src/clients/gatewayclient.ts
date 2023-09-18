@@ -68,6 +68,14 @@ export class GatewayClient extends EventEmitter {
   }
 
   sendTunnelData(tunnelData: Uint8Array, channel: number) {
+    if(!(tunnelData instanceof Uint8Array)){
+    console.warn(`[src/clients/gatewayclient.ts=>sendTunnelData] tunnelData isn't of type Uint8Array but of type ${typeof tunnelData}`);
+    }
+    
+    if(typeof channel !== 'number'){
+    console.warn(`[src/clients/gatewayclient.ts=>sendTunnelData] channel isn't of type number but of type ${typeof channel}`);
+    }
+    
     channel = channel || 0;
     debug("Sending tunnel data to gateway server");
     const data = this._protocol.pack_tunnel_data_packet_for_server(
@@ -83,6 +91,22 @@ export class GatewayClient extends EventEmitter {
     clientProtocol: string,
     clientBuild: string
   ) {
+    if(typeof characterId !== 'string'){
+    console.warn(`[src/clients/gatewayclient.ts=>login] characterId isn't of type string but of type ${typeof characterId}`);
+    }
+    
+    if(typeof ticket !== 'string'){
+    console.warn(`[src/clients/gatewayclient.ts=>login] ticket isn't of type string but of type ${typeof ticket}`);
+    }
+    
+    if(typeof clientProtocol !== 'string'){
+    console.warn(`[src/clients/gatewayclient.ts=>login] clientProtocol isn't of type string but of type ${typeof clientProtocol}`);
+    }
+    
+    if(typeof clientBuild !== 'string'){
+    console.warn(`[src/clients/gatewayclient.ts=>login] clientBuild isn't of type string but of type ${typeof clientBuild}`);
+    }
+    
     debug("Sending login request");
     const data = this._protocol.pack_login_request_packet(
       BigInt(characterId),
