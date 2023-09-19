@@ -3396,10 +3396,10 @@ export class ZoneServer2016 extends EventEmitter {
     }
   }
 
-  sendUnbufferedData(
+  sendUnbufferedData<ZonePacket>(
     client: Client,
     packetName: h1z1PacketsType2016,
-    obj: zone2016packets
+    obj: ZonePacket
   ) {
     this._sendData(client, packetName, obj, true);
   }
@@ -6814,6 +6814,7 @@ export class ZoneServer2016 extends EventEmitter {
     inputString: string,
     targetClient: string | Client | undefined
   ) {
+
     if (typeof targetClient == "string") {
       this.sendChatText(
         client,
