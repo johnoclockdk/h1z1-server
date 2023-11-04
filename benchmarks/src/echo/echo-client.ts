@@ -25,6 +25,9 @@ export class EchoClient {
   private _receivePacketsFromBundle: number = 0;
   private _lastAck: number = 0;
   private _dummyData: Uint8Array;
+  private _lastReceivedPacket: number = 0;
+  private _isStuck: boolean = false;
+  private _sessionPromiseResolver: any;
   constructor(serverPort: number, benchParameters: BenchParameters) {
     this._benchParameters = benchParameters;
     this._dummyData = this.genDummyData();
@@ -49,7 +52,7 @@ export class EchoClient {
     }
     return new Uint8Array(dummy);
   }
-  sendSessionRequest() {
+  async sendSessionRequest() {
     const sessionRequestPacket = this._protocol.pack_session_request_packet(
       Math.floor(Math.random() * 100000),
       0,
@@ -57,6 +60,11 @@ export class EchoClient {
       "Echo"
     );
     this._sendPhysicalPacket(sessionRequestPacket);
+    const p = new Promise((resolve) => {
+      this._sessionPromiseResolver = resolve;
+    }
+    );
+    await p;
   }
 
   private _sendPhysicalPacket(packet: Uint8Array): void {
@@ -103,19 +111,33 @@ export class EchoClient {
   }
 
   async getFinalTime() {
-    while (!this._finalTime) {
-      await Scheduler.yield();
+    this.hasFinish()
+    if (!this._finalTime) {
+      await Scheduler.wait(1000);
+      await this.getFinalTime();
     }
     return this._finalTime;
   }
 
   hasFinish(): boolean {
+
+    if (this._lastReceivedPacket && this._lastReceivedPacket === this._receiveEchoedPackets) {
+      if (this._isStuck) {
+        console.log("a client seems to be stuck")
+        // this.finish();
+      }
+      this._isStuck = true;
+    }
+    this._lastReceivedPacket = this._receiveEchoedPackets;
     const allPacketsEchoed =
-      this._receiveEchoedPackets === this._benchParameters.packetsToExchange;
+      this._receiveEchoedPackets >= this._benchParameters.packetsToExchange - 1;
 
     const allPacketsAcked =
-      this._lastAck === this._benchParameters.packetsToExchange - 1;
+      this._lastAck >= this._benchParameters.packetsToExchange - 1;
 
+    // console.log(`received ${this._receiveEchoedPackets} packets`);
+    // console.log(`packets to exchange ${this._benchParameters.packetsToExchange}`);
+    // console.log(`last ack ${this._lastAck}`);
     return (
       allPacketsEchoed &&
       (!this._benchParameters.stopTimerOnAllAcked || allPacketsAcked)
@@ -133,6 +155,7 @@ export class EchoClient {
     }
     switch (packet.name) {
       case "SessionReply":
+        this._sessionPromiseResolver(1);
         this.sendMultipleDataPackets();
         this.startTimer();
         break;
