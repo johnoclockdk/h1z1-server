@@ -11,7 +11,7 @@
 //   Based on https://github.com/psemu/soe-network
 // ======================================================================
 
-import { Collection, MongoClient } from "mongodb";
+import { ClientSession, Collection, Db, MongoClient } from "mongodb";
 import {
   BaseConstructionSaveData,
   BaseEntityUpdateSaveData,
@@ -141,18 +141,20 @@ export function constructContainers(
 }
 
 export class WorldDataManager {
-  private _db: any;
+  private _db!: Db;
   private _appDataFolder = getAppDataFolderPath();
   private _worldId: number = 0;
   private _soloMode: boolean = false;
   readonly worldSaveVersion: number = 2;
+  private _mongoClient!: MongoClient;
+  mongoIsAReplicatSet?: boolean;
 
   /* MANAGED BY CONFIGMANAGER */
   /*saveTimeInterval: number = 600000;
 
   nextSaveTime: number = Date.now() + this.saveTimeInterval;*/
 
-  static async getDatabase(mongoAddress: string) {
+  static async getDatabase(mongoAddress: string): Promise<[Db, MongoClient]> {
     const mongoClient = new MongoClient(mongoAddress, {
       maxPoolSize: 100
     });
@@ -165,14 +167,49 @@ export class WorldDataManager {
     // if no collections exist on h1server database , fill it with samples
     (await mongoClient.db(DB_NAME).collections()).length ||
       (await initMongo(mongoClient, "ZoneServer"));
-    return mongoClient.db(DB_NAME);
+    return [mongoClient.db(DB_NAME), mongoClient];
   }
 
   async initialize(worldId: number, mongoAddress: string) {
     this._soloMode = !mongoAddress;
     this._worldId = worldId;
     if (!this._soloMode) {
-      this._db = await WorldDataManager.getDatabase(mongoAddress);
+      const [db, mongoClient] =
+        await WorldDataManager.getDatabase(mongoAddress);
+      this._db = db;
+      this._mongoClient = mongoClient;
+      //  check if mongo is a replicat set
+      try {
+        this.mongoIsAReplicatSet = Boolean(
+          (
+            await this._mongoClient
+              .db("local")
+              .collection("replset.election")
+              .find()
+              .toArray()
+          ).length
+        );
+      } catch (e) {
+        if (process.env.IS_REPLICAT_SET) {
+          console.log(
+            "Replicat set was forced to true but mongo is not a replicat set, if this is not intentionnal, please remove the env var IS_REPLICAT_SET"
+          );
+          this.mongoIsAReplicatSet = true;
+        } else {
+          console.log(
+            "Unable to detect if mongo is a replicat set, assuming it's not"
+          );
+          console.log(
+            "If you are using a replicat set, please make sure that the user you are using to connect to mongo has enought permissions to read the 'local' db or set the env var IS_REPLICAT_SET to true"
+          );
+          this.mongoIsAReplicatSet = false;
+        }
+      }
+      if (this.mongoIsAReplicatSet) {
+        console.log("Mongo detected as a replicat set");
+      } else {
+        console.log("Mongo detected as a standalone server");
+      }
     }
   }
 
@@ -998,6 +1035,7 @@ export class WorldDataManager {
   }
 
   async saveConstructionData(constructions: ConstructionParentSaveData[]) {
+    console.time("WDM: saveConstructionData");
     if (this._soloMode) {
       fs.writeFileSync(
         `${this._appDataFolder}/worlddata/construction.json`,
@@ -1007,6 +1045,11 @@ export class WorldDataManager {
       const collection = this._db?.collection(
         DB_COLLECTIONS.CONSTRUCTION
       ) as Collection;
+      let session: ClientSession | undefined;
+      if (this.mongoIsAReplicatSet) {
+        session = this._mongoClient.startSession();
+        session.startTransaction();
+      }
       const updatePromises = [];
       for (let i = 0; i < constructions.length; i++) {
         const construction = constructions[i];
@@ -1014,7 +1057,7 @@ export class WorldDataManager {
           collection.updateOne(
             { characterId: construction.characterId, serverId: this._worldId },
             { $set: construction },
-            { upsert: true }
+            { upsert: true, session }
           )
         );
       }
@@ -1022,11 +1065,18 @@ export class WorldDataManager {
       const allCharactersIds = constructions.map((construction) => {
         return construction.characterId;
       });
-      await collection.deleteMany({
-        serverId: this._worldId,
-        characterId: { $nin: allCharactersIds }
-      });
+      await collection.deleteMany(
+        {
+          serverId: this._worldId,
+          characterId: { $nin: allCharactersIds }
+        },
+        { session }
+      );
+      if (session) {
+        await session.commitTransaction();
+      }
     }
+    console.timeEnd("WDM: saveConstructionData");
   }
 
   static getPlantSaveData(entity: Plant, serverId: number): PlantSaveData {

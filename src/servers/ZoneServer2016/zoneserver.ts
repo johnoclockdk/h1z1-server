@@ -100,7 +100,7 @@ import {
   getDistance2d
 } from "../../utils/utils";
 
-import { Db, WithId } from "mongodb";
+import { Db, MongoClient, WithId } from "mongodb";
 import { BaseFullCharacter } from "./entities/basefullcharacter";
 import { ItemObject } from "./entities/itemobject";
 import {
@@ -254,6 +254,8 @@ export class ZoneServer2016 extends EventEmitter {
   private _gatewayServer: GatewayServer;
   readonly _protocol: H1Z1Protocol;
   _db!: Db;
+  // eslint disable-next-line @typescript-eslint/no-unused-vars
+  private _mongoClient!: MongoClient;
   readonly _soloMode: boolean;
   _serverName = process.env.SERVER_NAME || "";
   readonly _mongoAddress: string;
@@ -1387,7 +1389,11 @@ export class ZoneServer2016 extends EventEmitter {
     )) as unknown as WorldDataManagerThreaded;
     await this.worldDataManager.initialize(this._worldId, this._mongoAddress);
     if (!this._soloMode) {
-      this._db = await WorldDataManager.getDatabase(this._mongoAddress);
+      const [db, mongoClient] = await WorldDataManager.getDatabase(
+        this._mongoAddress
+      );
+      this._db = db;
+      this._mongoClient = mongoClient;
     }
     if (this.enableWorldSaves) {
       const loadedWorld = await this.worldDataManager.getServerData(
@@ -7909,6 +7915,6 @@ if (process.env.VSCODE_DEBUG === "true") {
     1117,
     Buffer.from(DEFAULT_CRYPTO_KEY, "base64"),
     process.env.MONGO_URL,
-    2
+    12
   ).start();
 }
