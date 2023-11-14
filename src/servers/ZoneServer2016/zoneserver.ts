@@ -4004,10 +4004,14 @@ export class ZoneServer2016 extends EventEmitter {
         `${client.character.name} has been kicked from the server!`
       );
     }
+    console.log("Kicking player: " + client.character.name);
+    console.log("Reason: " + reason);
     this.kickPlayer(client);
   }
 
   kickPlayer(client: Client) {
+    console.log("Kicking player: " + client.character.name);
+    return;
     this.sendData<CharacterSelectSessionResponse>(
       client,
       "CharacterSelectSessionResponse",

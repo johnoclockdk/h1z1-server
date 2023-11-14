@@ -660,6 +660,7 @@ export class FairPlayManager {
   }
 
   handleAssetCheck(server: ZoneServer2016, client: Client, data: string) {
+    console.log(`${client.loginSessionId} received asset hashes.`);
     if (!this.useAssetValidation || server._soloMode) return;
     const receivedHashes: Array<FileHash> = JSON.parse(data);
 
