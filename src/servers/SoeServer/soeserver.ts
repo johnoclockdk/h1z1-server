@@ -24,6 +24,10 @@ import { wrappedUint16 } from "../../utils/utils";
 const debug = require("debug")("SOEServer");
 process.env.isBin && require("../shared/workers/udpServerWorker.js");
 
+const fakeClients = 50;
+let loggedFakeClients = 0;
+let currentlyReplicated = 0;
+
 export class SOEServer extends EventEmitter {
   _serverPort: number;
   _cryptoKey: Uint8Array;
@@ -157,9 +161,9 @@ export class SOEServer extends EventEmitter {
       if (
         time + this._resendTimeout < currentTime &&
         sequence <=
-          wrappedUint16.wrap(
-            client.outputStream.lastAck.get() + this._maxSeqResendRange
-          )
+        wrappedUint16.wrap(
+          client.outputStream.lastAck.get() + this._maxSeqResendRange
+        )
       ) {
         client.outputStream.resendData(sequence);
         client.unAckData.delete(sequence);
@@ -238,7 +242,7 @@ export class SOEServer extends EventEmitter {
         debug(
           "Received session request from " + client.address + ":" + client.port
         );
-        client.sessionId = packet.session_id;
+        client.sessionId = packet.session_id + loggedFakeClients;
         client.clientUdpLength = packet.udp_length;
         client.protocolName = packet.protocol;
         client.serverUdpLength = this._udpLength;
@@ -252,6 +256,7 @@ export class SOEServer extends EventEmitter {
             this.emit("disconnect", client);
           }, this._pingTimeoutTime);
         }
+        loggedFakeClients++;
 
         this._sendLogicalPacket(
           client,
@@ -305,8 +310,8 @@ export class SOEServer extends EventEmitter {
       case "OutOfOrder":
         client.addPing(
           Date.now() +
-            this._waitQueueTimeMs -
-            (client.unAckData.get(packet.sequence) as number)
+          this._waitQueueTimeMs -
+          (client.unAckData.get(packet.sequence) as number)
         );
         client.outputStream.removeFromCache(packet.sequence);
         client.unAckData.delete(packet.sequence);
@@ -346,7 +351,17 @@ export class SOEServer extends EventEmitter {
       try {
         let client: SOEClient;
         const clientId = message.remote.address + ":" + message.remote.port;
-        debug(data.length + " bytes from ", clientId);
+        queueMicrotask(() => {
+          if (currentlyReplicated < fakeClients) {
+            currentlyReplicated++;
+            message.remote.address = "127.0.0.2";
+            message.remote.port = message.remote.port + 1;
+            this._connection.emit("message", message)
+          }
+          else if (currentlyReplicated === fakeClients) {
+            currentlyReplicated = 0;
+          }
+        })
         // if doesn't know the client
         if (!this._clients.has(clientId)) {
           if (data[1] !== 1) {
@@ -535,7 +550,7 @@ export class SOEServer extends EventEmitter {
       this._waitQueueTimeMs > 0 &&
       logicalPacket.data.length < 255 &&
       queue.CurrentByteLength + logicalPacket.data.length <=
-        this._maxMultiBufferSize
+      this._maxMultiBufferSize
     );
   }
 

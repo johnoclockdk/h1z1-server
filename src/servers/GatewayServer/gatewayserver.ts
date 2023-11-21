@@ -13,11 +13,14 @@
 
 import { EventEmitter } from "node:events";
 import { SOEServer } from "../SoeServer/soeserver";
-import { GatewayProtocol } from "h1emu-core";
+import { GatewayProtocol, generate_random_guid } from "h1emu-core";
 import SOEClient from "../SoeServer/soeclient";
 import { crc_length_options } from "../../types/soeserver";
+import { getAppDataFolderPath } from "../../utils/utils";
 
 const debug = require("debug")("GatewayServer");
+
+let clientCount = 0;
 
 export class GatewayServer extends EventEmitter {
   _soeServer: SOEServer;
@@ -56,6 +59,12 @@ export class GatewayServer extends EventEmitter {
                   if (appData) {
                     this._soeServer.sendAppData(client, appData);
                   }
+                  const singlePlayerCharacters = require(`${getAppDataFolderPath()}/single_player_characters2016.json`);
+                  packet.character_id = singlePlayerCharacters[clientCount % singlePlayerCharacters.length].characterId
+                  if(clientCount){
+                    packet.ticket = generate_random_guid()
+                  }
+
                   this.emit(
                     "login",
                     client,
@@ -63,6 +72,7 @@ export class GatewayServer extends EventEmitter {
                     packet.ticket,
                     packet.client_protocol
                   );
+                  clientCount++;
                 }
                 break;
               case "Logout":

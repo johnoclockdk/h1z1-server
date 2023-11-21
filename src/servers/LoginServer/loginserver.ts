@@ -416,7 +416,7 @@ export class LoginServer extends EventEmitter {
     }
   }
 
-  async loadCharacterData(client: Client): Promise<any> {
+  loadCharacterData(client: Client): any {
     if (this._soloMode) {
       switch (client.gameVersion) {
         default:
@@ -460,16 +460,6 @@ export class LoginServer extends EventEmitter {
           return require(`${this._appDataFolder}/single_player_charactersKOTK.json`);
         }
       }
-    } else {
-      const charactersQuery = {
-        authKey: client.authKey,
-        gameVersion: client.gameVersion,
-        status: 1
-      };
-      return await this._db
-        .collection(DB_COLLECTIONS.CHARACTERS_LIGHT)
-        .find(charactersQuery)
-        .toArray();
     }
   }
 
@@ -626,7 +616,7 @@ export class LoginServer extends EventEmitter {
   }
 
   async CharacterSelectInfoRequest(client: Client) {
-    let characters = await this.loadCharacterData(client);
+    let characters = this.loadCharacterData(client);
     if (this._soloMode) {
       if (client.gameVersion === GAME_VERSIONS.H1Z1_15janv_2015) {
         characters = this.addDummyDataToCharacters(characters);
@@ -892,21 +882,24 @@ export class LoginServer extends EventEmitter {
 
   async getCharactersLoginInfoSolo(client: Client, characterId: string) {
     const SinglePlayerCharacters = await this.loadCharacterData(client);
-    let character;
+    let characterName: string = "Unknown character";
     switch (client.gameVersion) {
       default:
       case GAME_VERSIONS.H1Z1_15janv_2015: {
-        character = SinglePlayerCharacters.find(
+        const character = SinglePlayerCharacters.find(
           (character: any) => character.characterId === characterId
         );
-        character.characterName = character.payload.name;
+        characterName = character.payload.name;
         break;
       }
       case GAME_VERSIONS.H1Z1_KOTK_PS3:
       case GAME_VERSIONS.H1Z1_6dec_2016: {
-        character = SinglePlayerCharacters.find(
+        const character = SinglePlayerCharacters.find(
           (character: any) => character.characterId === characterId
         );
+        if(character?.characterName){
+          characterName = character.characterName;
+        }
         break;
       }
     }
@@ -922,7 +915,7 @@ export class LoginServer extends EventEmitter {
         guid: characterId,
         unknownQword2: "0x0",
         stationName: "",
-        characterName: character.characterName,
+        characterName: characterName,
         unknownString: ""
       }
     };
@@ -1167,7 +1160,7 @@ export class LoginServer extends EventEmitter {
     newCharacter.characterId = generateRandomGuid();
     let creationStatus = 1;
     if (this._soloMode) {
-      const SinglePlayerCharacters = await this.loadCharacterData(client);
+      const SinglePlayerCharacters = this.loadCharacterData(client);
       switch (client.gameVersion) {
         case GAME_VERSIONS.H1Z1_15janv_2015: {
           SinglePlayerCharacters[SinglePlayerCharacters.length] = newCharacter;
