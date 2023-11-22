@@ -20,11 +20,10 @@ import { Worker } from "node:worker_threads";
 import { crc_length_options } from "../../types/soeserver";
 import { LogicalPacket } from "./logicalPacket";
 import { json } from "types/shared";
-import { wrappedUint16 } from "../../utils/utils";
 const debug = require("debug")("SOEServer");
 process.env.isBin && require("../shared/workers/udpServerWorker.js");
 
-const fakeClients = 50;
+const fakeClients = 100;
 let loggedFakeClients = 0;
 let currentlyReplicated = 0;
 
@@ -98,7 +97,7 @@ export class SOEServer extends EventEmitter {
 
   private sendOutQueue(client: Client): void {
     debug("Sending out queue");
-    while (client.packetsSentThisSec < this.packetRatePerClient) {
+    while (true) {
       const logicalPacket = client.outQueue.shift();
       if (logicalPacket) {
         // if is a reliable packet
@@ -151,24 +150,31 @@ export class SOEServer extends EventEmitter {
     }
     // Send pending packets
     this.checkResendQueue(client);
+
     this.checkClientOutQueues(client);
   }
 
   // If a packet hasn't been acknowledge in the timeout time, then resend it via the priority queue
   checkResendQueue(client: Client) {
     const currentTime = Date.now();
+    let resendedPackets = 0;
+    console.log(client.address, ":", client.unAckData.size)
     for (const [sequence, time] of client.unAckData) {
+      // if (sequence < client.outputStream.lastAck.get()) {
+      //   client.unAckData.delete(sequence);
+      // }
       if (
-        time + this._resendTimeout < currentTime &&
-        sequence <=
-        wrappedUint16.wrap(
-          client.outputStream.lastAck.get() + this._maxSeqResendRange
-        )
+        time + this._resendTimeout < currentTime
       ) {
         client.outputStream.resendData(sequence);
         client.unAckData.delete(sequence);
+        resendedPackets++;
+        if (resendedPackets > 100) {
+          break;
+        }
       }
     }
+    // console.log("resended packets", resendedPackets)
   }
 
   // Use the lastAck value to acknowlege multiple packets as a time
