@@ -25,7 +25,7 @@ import { SOEOutputChannels } from "./soeoutputstream";
 const debug = require("debug")("SOEServer");
 process.env.isBin && require("../shared/workers/udpServerWorker.js");
 
-const fakeClients = 100;
+const fakeClients = 50;
 let loggedFakeClients = 0;
 let currentlyReplicated = 0;
 
@@ -124,7 +124,6 @@ export class SOEServer extends EventEmitter {
   }
 
   private soeRoutine(): void {
-    const startTime = Date.now();
     for (const client of this._clients.values()) {
       this.soeClientRoutine(client);
     }
@@ -132,13 +131,6 @@ export class SOEServer extends EventEmitter {
       () => this.soeRoutine(),
       this._routineTiming
     );
-    const endTime = Date.now();
-    const timeTaken = endTime - startTime;
-    if (timeTaken > this._routineTiming) {
-      console.log(
-        `SOE routine took ${timeTaken}ms to execute, which is more than the routine timing of ${this._routineTiming}ms`
-      );
-    }
   }
 
   // Executed at the same rate for every client
@@ -156,7 +148,6 @@ export class SOEServer extends EventEmitter {
   checkResendQueue(client: Client) {
     const currentTime = Date.now();
     let resendedPackets = 0;
-    console.log(client.address, ":", client.unAckData.size)
     for (const [sequence, time] of client.unAckData) {
       // if (sequence < client.outputStream.lastAck.get()) {
       //   client.unAckData.delete(sequence);
@@ -177,7 +168,6 @@ export class SOEServer extends EventEmitter {
         }
       }
     }
-    // console.log("resended packets", resendedPackets)
   }
 
   // Use the lastAck value to acknowlege multiple packets as a time
