@@ -21,6 +21,7 @@ import { crc_length_options } from "../../types/soeserver";
 import { LogicalPacket } from "./logicalPacket";
 import { json } from "types/shared";
 import { wrappedUint16 } from "../../utils/utils";
+import { SOEOutputChannels } from "./soeoutputstream";
 const debug = require("debug")("SOEServer");
 process.env.isBin && require("../shared/workers/udpServerWorker.js");
 
@@ -48,7 +49,6 @@ export class SOEServer extends EventEmitter {
   ) => void;
   private _resendTimeout: number = 500;
   packetRatePerClient: number = 500;
-  private _ackTiming: number = 80;
   private _routineTiming: number = 3;
   _allowRawDataReception: boolean = false;
   private _maxSeqResendRange: number = 50;
@@ -143,12 +143,9 @@ export class SOEServer extends EventEmitter {
 
   // Executed at the same rate for every client
   private soeClientRoutine(client: Client) {
-    if (client.lastAckTime + this._ackTiming < Date.now()) {
-      // Acknowledge received packets
-      this.checkAck(client);
-      this.checkOutOfOrderQueue(client);
-      client.lastAckTime = Date.now();
-    }
+    // Acknowledge received packets
+    this.checkAck(client);
+    this.checkOutOfOrderQueue(client);
     // Send pending packets
     this.checkResendQueue(client);
 
@@ -400,7 +397,7 @@ export class SOEServer extends EventEmitter {
           });
 
           client.outputStream.on(
-            "data",
+            SOEOutputChannels.Reliable,
             (
               data: Buffer,
               sequence: number,
@@ -418,6 +415,26 @@ export class SOEServer extends EventEmitter {
               );
             }
           );
+
+          client.outputStream.on(
+            SOEOutputChannels.Ordered,
+            (data: Buffer, sequence: number, unbuffered: boolean) => {
+              console.log("ordered")
+              this._sendLogicalPacket(
+                client,
+                SoeOpcode.Ordered,
+                {
+                  sequence: sequence,
+                  data: data
+                },
+                unbuffered
+              );
+            }
+          );
+
+          client.outputStream.on(SOEOutputChannels.Raw, (data: Buffer) => {
+            // TODO:
+          });
 
           // the only difference with the event "data" is that resended data is send via the priority queue
           client.outputStream.on(
@@ -503,6 +520,9 @@ export class SOEServer extends EventEmitter {
         break;
       case SoeOpcode.OutOfOrder:
         logicalData = this._protocol.pack_out_of_order_packet(packet.sequence);
+        break;
+      case SoeOpcode.Ordered:
+        logicalData = this._protocol.pack_ordered_packet(packet.data,packet.sequence);
         break;
       case SoeOpcode.Data:
         logicalData = this._protocol.pack_data_packet(
@@ -605,24 +625,13 @@ export class SOEServer extends EventEmitter {
   }
 
   // Called by the application to send data to a client
-  sendAppData(client: Client, data: Uint8Array): void {
+  sendAppData(client: Client, data: Uint8Array, channel= SOEOutputChannels.Reliable, unbuffered:boolean = false): void {
     if (client.outputStream.isUsingEncryption()) {
       debug("Sending app data: " + data.length + " bytes with encryption");
     } else {
       debug("Sending app data: " + data.length + " bytes");
     }
-    client.outputStream.write(data);
-  }
-
-  sendUnbufferedAppData(client: Client, data: Uint8Array): void {
-    if (client.outputStream.isUsingEncryption()) {
-      debug(
-        "Sending unbuffered app data: " + data.length + " bytes with encryption"
-      );
-    } else {
-      debug("Sending unbuffered app data: " + data.length + " bytes");
-    }
-    client.outputStream.write(data, true);
+    client.outputStream.write(data, channel,unbuffered);
   }
 
   setEncryption(client: Client, value: boolean): void {
