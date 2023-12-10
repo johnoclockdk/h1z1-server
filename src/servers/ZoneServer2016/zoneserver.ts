@@ -4705,7 +4705,9 @@ export class ZoneServer2016 extends EventEmitter {
     vehicle.seats[seatId] = client.character.characterId;
     if (seatId == 0) {
       this.takeoverManagedObject(client, vehicle);
-      this.abilitiesManager.sendVehicleAbilities(this, client, vehicle);
+      if(vehicle.vehicleId != VehicleIds.SPECTATE) {
+        this.abilitiesManager.sendVehicleAbilities(this, client, vehicle);
+      }
       //vehicle.checkEngineRequirements(this);
       this.sendData<VehicleOwner>(client, "Vehicle.Owner", {
         guid: vehicle.characterId,
