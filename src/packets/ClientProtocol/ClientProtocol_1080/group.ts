@@ -28,7 +28,7 @@ const groupCharacterSchema: Array<PacketField> = [
 
 const inviteDataSchema: Array<PacketField> = [
   { name: "unknownQword1", type: "uint64string", defaultValue: "" },
-  { name: "unknownDword1", type: "uint32", defaultValue: 0 },
+  { name: "hasRaidError", type: "uint32", defaultValue: 0 }, // use raid error strings if error
   {
     name: "sourceCharacter",
     type: "schema",
@@ -94,8 +94,8 @@ export const groupPackets: PacketStructures = [
     0x1301,
     {
       fields: [
-        { name: "unknownDword1", type: "uint32", defaultValue: 0 },
-        { name: "unknownDword2", type: "uint32", defaultValue: 0 },
+        { name: "inviteType", type: "uint32", defaultValue: 0 },
+        { name: "errorId", type: "uint32", defaultValue: 0 },
         { name: "unknownDword3", type: "uint32", defaultValue: 0 },
         {
           name: "inviteData",

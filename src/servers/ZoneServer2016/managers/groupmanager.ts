@@ -210,8 +210,8 @@ export class GroupManager {
       source.character.groupId;
 
     server.sendData(target, "Group.Invite", {
-      unknownDword1: 1, // should be 1
-      unknownDword2: 5,
+      inviteType: 1, // should be 1
+      errorId: 0,
       unknownDword3: 5,
       inviteData: {
         sourceCharacter: {
