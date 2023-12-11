@@ -111,8 +111,8 @@ export const groupPackets: PacketStructures = [
     0x1302,
     {
       fields: [
-        { name: "unknownDword1", type: "uint32", defaultValue: 0 },
-        { name: "unknownDword2", type: "uint32", defaultValue: 0 },
+        { name: "inviteType", type: "uint32", defaultValue: 0 },
+        { name: "errorId", type: "uint32", defaultValue: 0 },
         { name: "joinState", type: "uint32", defaultValue: 0 },
         { name: "unknownDword3", type: "uint32", defaultValue: 0 },
         {
