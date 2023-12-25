@@ -366,7 +366,9 @@ export class ZonePacketHandlers {
       });
       client.character.isReady = true;
       server.airdropManager(client, true);
-
+      if(server.voiceChatManager.useVoiceChatV2 && server.voiceChatManager.joinVoiceChatOnConnect) { 
+        server.voiceChatManager.handleVoiceChatInit(server, client);
+      }
       server.fairPlayManager.handleAssetValidationInit(server, client);
     }
     if (!client.character.isAlive || client.character.isRespawning) {
@@ -3353,8 +3355,11 @@ export class ZonePacketHandlers {
       case "01": // asset validator
         server.fairPlayManager.handleAssetCheck(server, client, data);
         break;
-      case "02": // client messages
+      case "02": // admin client messages
         server.sendChatTextToAdmins(`${client.character.name}: ${data}`);
+        break;
+      case "03": // voicechat client to server to client
+        server.voiceChatManager.sendVoiceChatError(server, client, data);
         break;
       default:
         console.log(
