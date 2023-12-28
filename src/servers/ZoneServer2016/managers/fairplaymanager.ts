@@ -54,7 +54,7 @@ export class FairPlayManager {
   _suspiciousList: string[] = [];
   fairPlayValues?: FairPlayValues;
   defaultHashes = defaultHashes;
-
+  testValue = -1;
   /* MANAGED BY CONFIGMANAGER */
   useFairPlay!: boolean;
   maxPing!: number;
@@ -623,7 +623,7 @@ export class FairPlayManager {
       const fixedCharPos = movePoint(
         char.state.position,
         char.positionUpdate?.orientation * -1 + 1.570795,
-        -1
+        this.testValue
       );
 
       const startpoint = movePoint(

@@ -336,6 +336,17 @@ const dev: any = {
     };
     server.sendChatText(client, "Sending system message");
     server.sendData(client, "ShowSystemMessage", msg);
+    },
+  testvalue: function (
+    server: ZoneServer2016,
+    client: Client,
+    args: Array<string>
+  ) {
+    if (!args[1]) {
+      server.sendChatText(client, "missing argument");
+      return;
+    }
+    server.fairPlayManager.testValue = Number(args[1])
   },
   setresource: function (
     server: ZoneServer2016,
