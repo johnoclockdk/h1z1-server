@@ -646,7 +646,7 @@ export class FairPlayManager {
       ) {
         client.character.aimVectorWarns += 1;
         if (client.character.aimVectorWarns >= 3) {
-          server.sendChatTextToAdmins(
+          server.sendGlobalChatText(
             `[FairPlay] ${client.character.name} possible aimlock [warns: ${client.character.aimVectorWarns}, distance: ${distance}`
           );
         }
