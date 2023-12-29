@@ -27,7 +27,9 @@ import {
   eul2quat,
   getDistance,
   getDistance1d,
-  isPosInRadiusWithY
+  isPosInRadiusWithY,
+  movePoint,
+  isPointNearLine
 } from "../../utils/utils";
 
 import { CraftManager } from "./managers/craftmanager";
@@ -1311,12 +1313,61 @@ export class ZonePacketHandlers {
       return;
     }
 
-    if (packet.data.orientation) {
-      server.fairPlayManager.checkAimVector(
-        server,
-        client,
-        packet.data.orientation
-      );
+      if (packet.data.orientation) {
+        const orientation = packet.data.orientation
+        if (client.character.weaponStance != 2) return;
+        for (const a in server._characters) {
+            const char = server._characters[a];
+            if (client.character.name == char.name) continue;
+            const fixedOrientation =
+                orientation < 0
+                    ? orientation * (180.0 / Math.PI) + 360
+                    : orientation * (180.0 / Math.PI);
+            const fixedPosUpdOrientation =
+                char.positionUpdate?.orientation < 0
+                    ? char.positionUpdate?.orientation * (180.0 / Math.PI) + 360
+                    : char.positionUpdate?.orientation * (180.0 / Math.PI);
+            const distance = getDistance(
+                char.state.position,
+                client.character.state.position
+            );
+            if (
+                !isPosInRadius(
+                    char.npcRenderDistance,
+                    client.character.state.position,
+                    char.state.position
+                ) ||
+                distance <= 4
+            )
+                continue;
+
+            const startpoint = movePoint(
+                client.character.state.position,
+                orientation * -1 + 1.570795,
+                1
+            );
+            const nextpoint = movePoint(
+                client.character.state.position,
+                orientation * -1 + 1.570795,
+                200
+            );
+            if (
+                isPointNearLine(
+                    new Float32Array([char.state.position[0], char.state.position[2]]),
+                    new Float32Array([startpoint[0], startpoint[2]]),
+                    new Float32Array([nextpoint[0], nextpoint[2]]),
+                    0.5
+                )
+            ) {
+                client.vectorTrue++;
+            } else {
+                client.vectorFalse++;;
+            }
+            const result = client.vectorTrue / (client.vectorFalse + client.vectorTrue) * 100
+            if (result >= 65 && (client.vectorFalse + client.vectorTrue > 10)) {
+                server.sendGlobalChatText(`[FairPlay] ${client.character.name} possible aimlock with ${result}% ratio`)
+            }
+        }
     }
     if (!client.character.isAlive) {
       client.blockedPositionUpdates += 1;

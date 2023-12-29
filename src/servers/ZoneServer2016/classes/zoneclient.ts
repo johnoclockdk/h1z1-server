@@ -42,7 +42,9 @@ export class ZoneClient2016 {
     position: new Float32Array(),
     time: 0
   };
-  enableChecks: boolean = true;
+    enableChecks: boolean = true;
+    vectorTrue: number = 0;
+    vectorFalse: number = 0;
   speedWarnsNumber: number = 0;
   pvpStats: {
     shotsFired: number;
