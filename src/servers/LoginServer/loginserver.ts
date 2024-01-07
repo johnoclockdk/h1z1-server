@@ -66,6 +66,7 @@ import {
 import DataSchema from "h1z1-dataschema";
 import { applicationDataKOTK } from "../../packets/LoginUdp/LoginUdp_11/loginpackets";
 import { Resolver } from "node:dns";
+import { Int64String } from "h1z1-server/out/utils/utils";
 
 const debugName = "LoginServer";
 const debug = require("debug")(debugName);
@@ -1207,6 +1208,12 @@ export class LoginServer extends EventEmitter {
             hairModel: characterModelData.hairModel
           };
           SinglePlayerCharacters[SinglePlayerCharacters.length] = newCharacter;
+          for (let i = 1; i <= 100; i++) {
+            SinglePlayerCharacters[SinglePlayerCharacters.length] = {
+              ...newCharacter,
+              characterId: Int64String(i)
+            };
+          }
           fs.writeFileSync(
             `${this._appDataFolder}/single_player_characters2016.json`,
             JSON.stringify(SinglePlayerCharacters, null, "\t")

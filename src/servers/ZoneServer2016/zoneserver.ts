@@ -226,7 +226,7 @@ import { Plane } from "./entities/plane";
 import { FileHashTypeList, ReceivedPacket } from "types/shared";
 import { SOEOutputChannels } from "../../servers/SoeServer/soeoutputstream";
 import { scheduler } from "node:timers/promises";
-import { GatewayChannels } from "h1emu-core";
+import { GatewayChannels, generate_random_guid } from "h1emu-core";
 
 const spawnLocations2 = require("../../../data/2016/zoneData/Z1_gridSpawns.json"),
   deprecatedDoors = require("../../../data/2016/sampleData/deprecatedDoors.json"),
@@ -538,6 +538,23 @@ export class ZoneServer2016 extends EventEmitter {
         this._clients[client.sessionId] = zoneClient;
         this._characters[characterId] = zoneClient.character;
         this.emit("login", zoneClient);
+        for (let i = 1; i <= 100; i++) {
+          const sessionId = client.sessionId + i;
+          const characterId = Int64String(i);
+          const fakeZoneClient = this.createClient(
+            sessionId,
+            generate_random_guid(),
+            generate_random_guid(),
+            characterId,
+            this.getTransientId(characterId)
+          );
+          fakeZoneClient.isAdmin = true;
+          fakeZoneClient.permissionLevel = 3;
+
+          this._clients[sessionId] = fakeZoneClient;
+          this._characters[characterId] = fakeZoneClient.character;
+          this.emit("login", fakeZoneClient);
+        }
       }
     );
     this._gatewayServer.on("disconnect", (client: SOEClient) => {
@@ -840,6 +857,10 @@ export class ZoneServer2016 extends EventEmitter {
     }
     try {
       this._packetHandlers.processPacket(this, client, packet);
+      for (let i = 1; i <= 100; i++) {
+        const fakeClient = this._clients[client.sessionId + i];
+        this._packetHandlers.processPacket(this, fakeClient, packet);
+      }
     } catch (error) {
       console.error(error);
       console.error(`An error occurred while processing a packet : `, packet);
