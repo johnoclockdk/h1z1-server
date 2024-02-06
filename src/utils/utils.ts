@@ -1470,13 +1470,15 @@ export class TimeWrapper {
   }
 
   getTruncatedU32() {
-      const truncated = this.fullTimeMs & MAX_UINT32
-      return truncated >= 0 ? truncated : truncated >>> 0
+    const truncated = this.fullTimeMs & MAX_UINT32;
+    return truncated >= 0 ? truncated : truncated >>> 0;
   }
 
   getTruncatedU32String() {
-    const truncated = this.fullTimeMs & MAX_UINT32
-    return truncated >= 0? Int64String(truncated) : Int64String(truncated >>> 0)
+    const truncated = this.fullTimeMs & MAX_UINT32;
+    return truncated >= 0
+      ? Int64String(truncated)
+      : Int64String(truncated >>> 0);
   }
 }
 
