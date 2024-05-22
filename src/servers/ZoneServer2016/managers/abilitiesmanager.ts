@@ -28,6 +28,7 @@ import { BaseLightweightCharacter } from "../entities/baselightweightcharacter";
 import { BaseEntity } from "../entities/baseentity";
 import {
   AbilitiesInitAbility,
+  AbilitiesSetActivatableAbilityManager,
   AbilitiesSetVehicleActivatableAbilityManager,
   AbilitiesUninitAbility,
   AbilitiesUpdateAbility,
@@ -41,8 +42,13 @@ import { DamageInfo, EntityDictionary } from "types/zoneserver";
 import { LoadoutItem } from "../classes/loadoutItem";
 import { Npc } from "../entities/npc";
 const vehicleAbilities = require("../../../../data/2016/dataSources/VehicleAbilities.json");
+const abilities = require("../../../../data/2016/dataSources/Abilities.json");
 
 export class AbilitiesManager {
+  sendSetActivatableAbilityManager(server: ZoneServer2016, client: Client) {
+    server.sendData<AbilitiesSetActivatableAbilityManager>(client, "Abilities.SetActivatableAbilityManager", abilities);
+  }
+
   sendVehicleAbilities(
     server: ZoneServer2016,
     client: Client,

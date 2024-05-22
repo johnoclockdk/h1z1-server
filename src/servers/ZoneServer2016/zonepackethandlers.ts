@@ -52,6 +52,7 @@ import { ConstructionDoor } from "./entities/constructiondoor";
 import { CommandHandler } from "./handlers/commands/commandhandler";
 import {
   AbilitiesInitAbility,
+  AbilitiesSetActivatableAbilityManager,
   AbilitiesUninitAbility,
   AbilitiesUpdateAbility,
   AccessedCharacterEndCharacterAccess,
@@ -264,23 +265,25 @@ export class ZonePacketHandlers {
       server.sendRawDataReliable(client, server.projectileDefinitionsCache);
     }
 
-    // for melees / emotes / vehicle boost / etc (needs more work)
-    /*
-    server.sendData<>(client, "Abilities.SetActivatableAbilityManager", abilities);
-      server.sendData<>(client, "ClientUpdate.UpdateStat", {
-        stats: [
-          {
-            statId: 5,
-            statValue: {
-                type: 1,
-                value: {
-                    base: 1.3,
-                    modifier: 0.16
-                }
+    // probably for emotes
+		//server.abilitiesManager.sendSetActivatableAbilityManager(server, client);
+
+		/*
+		// from z1br, maybe it's important for something eventually
+    server.sendData<>(client, "ClientUpdate.UpdateStat", {
+      stats: [
+        {
+          statId: 5,
+          statValue: {
+            type: 1,
+              value: {
+                base: 1.3,
+                modifier: 0.16
             }
           }
-        ]
-      })
+        }
+      ]
+    })
     */
 
     /*
