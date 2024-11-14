@@ -51,6 +51,10 @@ export class NavManager {
   updt() {
     this.crowd.update(1 / 60);
   }
+  getRandomNavPoint(): Vector3 {
+    const n = this.navMeshQuery.findRandomPoint();
+    return n.randomPoint;
+  }
   getClosestNavPoint(pos: Float32Array): Vector3 {
     const n = this.navMeshQuery.findNearestPoly(NavManager.Float32ToVec3(pos));
     return n.nearestPoint;

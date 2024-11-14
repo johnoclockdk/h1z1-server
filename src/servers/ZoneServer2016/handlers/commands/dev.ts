@@ -19,6 +19,7 @@ import {
   CharacterPlayWorldCompositeEffect,
   CharacterSeekTarget,
   ClientUpdateTextAlert,
+  ClientUpdateUpdateLocation,
   InGamePurchaseActiveSchedules,
   InGamePurchaseGiftOrderNotification,
   InGamePurchaseItemOfTheDay,
@@ -491,6 +492,18 @@ const dev: any = {
       unknownData2: {}
     });
   },
+  rndnav: async function (
+    server: ZoneServer2016,
+    client: Client,
+    args: Array<string>
+  ) {
+    for (let index = 0; index < 50; index++) {
+      const position = NavManager.Vec3ToFloat32(
+        server.navManager.getRandomNavPoint()
+      );
+      console.log(position);
+    }
+  },
   zombie: async function (
     server: ZoneServer2016,
     client: Client,
@@ -517,18 +530,21 @@ const dev: any = {
     let retries = 0;
     const interval = setInterval(() => {
       retries++;
-      if (retries > 10) {
+      if (retries > 30) {
         clearInterval(interval);
       }
 
       server.navManager.updt();
       if (zombie.navAgent) {
-        zombie.navAgent.requestMoveTarget(
-          server.navManager.getClosestNavPoint(client.character.state.position)
+        const closestpoint = server.navManager.getClosestNavPoint(
+          client.character.state.position
         );
+        const status = zombie.navAgent.requestMoveTarget(closestpoint);
+        console.log(status);
         console.log(zombie.navAgent.interpolatedPosition);
+        console.log(zombie.navAgent.nextTargetInPath());
         zombie.goTo(
-          NavManager.Vec3ToFloat32(zombie.navAgent.interpolatedPosition)
+          NavManager.Vec3ToFloat32(zombie.navAgent.nextTargetInPath())
         );
       }
     }, 500);

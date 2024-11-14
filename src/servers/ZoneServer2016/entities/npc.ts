@@ -497,7 +497,6 @@ export class Npc extends BaseFullCharacter {
     );
   }
   goTo(position: Float32Array) {
-    const angleInRadians2 = Math.random() * (2 * Math.PI) - Math.PI;
     const angleInRadians = Math.atan2(
       position[1] - this.state.position[1],
       getDistance(this.state.position, position)
@@ -511,7 +510,7 @@ export class Npc extends BaseFullCharacter {
         unknown3_int8: 0,
         stance: 66565,
         engineRPM: 0,
-        orientation: angleInRadians2,
+        orientation: angleInRadians,
         frontTilt: 0,
         sideTilt: 0,
         angleChange: 0,
