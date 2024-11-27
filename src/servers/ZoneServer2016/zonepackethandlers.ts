@@ -783,6 +783,7 @@ export class ZonePacketHandlers {
     client: Client,
     packet: ReceivedPacket<ClientLog>
   ) {
+    console.log(packet);
     const message = packet.data.message || "";
     if (
       packet.data.file ===

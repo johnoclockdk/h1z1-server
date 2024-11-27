@@ -610,10 +610,10 @@ export const characterPackets: PacketStructures = [
           type: "uint64string",
           defaultValue: "0x0000000000000000"
         },
-        { name: "unknown4", type: "uint8", defaultValue: 0 }, // die by falling to there left
+        { name: "unknown4", type: "uint8", defaultValue: 1 }, // die by falling to there left
         { name: "unknown5", type: "uint8", defaultValue: 1 }, // weird accrobatic stuff
         // when unknown4 & unknown5 are > 0 then the animation play in a loop forever
-        { name: "unknown6", type: "uint8", defaultValue: 0 }
+        { name: "unknown6", type: "uint8", defaultValue: 1 }
         // seems like some bytes can be added after that but not required
       ]
     }

@@ -520,29 +520,18 @@ const dev: any = {
     );
 
     server._npcs[characterId] = zombie;
-    server.aiManager.add_entity(zombie, zombie.entityType);
-    const a = server.navManager.createAgent(zombie.state.position);
-    zombie.navAgent = a;
-
-    await scheduler.wait(5000);
-    let retries = 0;
-    const interval = setInterval(() => {
-      retries++;
-      if (retries > 10) {
-        clearInterval(interval);
-      }
-
-      server.navManager.updt();
-      if (zombie.navAgent) {
-        zombie.navAgent.requestMoveTarget(
-          server.navManager.getClosestNavPoint(client.character.state.position)
-        );
-        console.log(zombie.navAgent.interpolatedPosition);
-        zombie.goTo(
-          NavManager.Vec3ToFloat32(zombie.navAgent.interpolatedPosition)
-        );
-      }
-    }, 500);
+    await scheduler.wait(6000);
+    server.sendData(client, "Ragdoll.Start", {
+      characterId: zombie.characterId
+    });
+    server.sendData(client, "Ragdoll.UpdatePose", {
+      characterId: zombie.characterId,
+      positionUpdate: client.character.positionUpdate
+    });
+    server.sendData(client, "Character.StartMultiStateDeath", {
+      characterId: zombie.characterId
+    });
+    console.log("aller ptn");
   },
   abilities: function (
     server: ZoneServer2016,

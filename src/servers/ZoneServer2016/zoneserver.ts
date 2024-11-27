@@ -950,11 +950,12 @@ export class ZoneServer2016 extends EventEmitter {
       packet.name != "Command.ExecuteCommand" &&
       packet.name != "H1emu.RequestModules" &&
       packet.name != "KeepAlive" &&
+      packet.name != "GetRewardBuffInfo" &&
+      packet.name != "ClientMetrics" &&
       packet.name != "PlayerUpdatePosition" &&
-      packet.name != "PlayerUpdateManagedPosition" &&
       packet.name != "ClientUpdate.MonitorTimeDrift"
     ) {
-      debug(`Receive Data ${[packet.name]}`);
+      console.log(`Receive Data ${[packet.name]}`);
     }
     if (packet.flag === GatewayChannels.UpdatePosition) {
       if (packet.data.flags === 513) return;
@@ -3866,10 +3867,12 @@ export class ZoneServer2016 extends EventEmitter {
       case "PlayerUpdatePosition":
       case "GameTimeSync":
       case "Synchronization":
+      case "ResourceEvent":
+      case "RewardBuffInfo":
       case "Vehicle.StateData":
         break;
       default:
-        debug("send data", packetName);
+        console.log("send data", packetName);
     }
     const data = this._protocol.pack(packetName, obj);
     if (data) {
