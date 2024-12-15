@@ -11,7 +11,7 @@
 //   Based on https://github.com/psemu/soe-network
 // ======================================================================
 
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import {
   CrowdAgent,
   init as initRecast,
@@ -41,7 +41,28 @@ export class NavManager {
 
     this.navMeshQuery = new NavMeshQuery(this.navmesh);
     this.crowd = new Crowd(navMesh, { maxAgents, maxAgentRadius });
+    setInterval(() => {
+      this.updt();
+    }, 250);
   }
+  // Convert Blender coordinates to Game coordinates
+  static blenderToGame(f: Float32Array): Float32Array {
+    return new Float32Array([
+      f[0] * 2, // Blender X → Game X (scaled)
+      f[1] * 2, // Blender Y → Game Z (inverted)
+      f[2] * 2 // Blender Z → Game Y (scaled)
+    ]);
+  }
+
+  // Convert Game coordinates to Blender coordinates
+  static gameToBlender(f: Float32Array): Float32Array {
+    return new Float32Array([
+      f[0] / 2, // Game X → Blender X
+      f[1] / 2, // Game Y → Blender Z (scaled)
+      f[2] / 2 // Game Z → Blender Y (scaled and inverted)
+    ]);
+  }
+
   static Float32ToVec3(f: Float32Array): Vector3 {
     return { x: f[0], y: f[1], z: f[2] };
   }
@@ -49,15 +70,22 @@ export class NavManager {
     return new Float32Array([v.x, v.y, v.z]);
   }
   updt() {
-    this.crowd.update(1 / 60);
+    const dt = 1 / 60;
+    const maxSubSteps = 10;
+
+    const timeSinceLastFrame = Date.now() - this.lastTimeCall;
+
+    this.crowd.update(dt, timeSinceLastFrame, maxSubSteps);
+    this.lastTimeCall = Date.now();
   }
   getClosestNavPoint(pos: Float32Array): Vector3 {
     const n = this.navMeshQuery.findNearestPoly(NavManager.Float32ToVec3(pos));
     return n.nearestPoint;
   }
-  createAgent(pos: Float32Array): CrowdAgent {
+  createAgent(pos: Float32Array): CrowdAgent | null {
+    pos = NavManager.gameToBlender(pos);
     const position = this.getClosestNavPoint(pos);
-    const radius = 0.5;
+    const radius = 5.5;
 
     const {
       randomPoint: initialAgentPosition,
@@ -67,13 +95,14 @@ export class NavManager {
 
     if (!success) {
       console.log(statusToReadableString(status));
+      return null;
     }
 
     const agent = this.crowd.addAgent(initialAgentPosition, {
-      radius: 0.5,
-      height: 2,
-      maxAcceleration: 4.0,
-      maxSpeed: 1.0,
+      radius: 1,
+      height: 4,
+      maxAcceleration: 8.0,
+      maxSpeed: 2.0,
       collisionQueryRange: 0.1,
       pathOptimizationRange: 0.0,
       separationWeight: 0

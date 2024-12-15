@@ -507,7 +507,7 @@ export class Npc extends BaseFullCharacter {
       transientId: this.transientId,
       positionUpdate: {
         sequenceTime: getCurrentServerTimeWrapper().getTruncatedU32(),
-        position: this.state.position,
+        position: position,
         unknown3_int8: 0,
         stance: 66565,
         engineRPM: 0,

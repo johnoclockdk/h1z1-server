@@ -43,6 +43,8 @@ import { Vehicle2016 } from "../../entities/vehicle";
 import { Plane } from "../../entities/plane";
 import { NavManager } from "../../../../utils/recast";
 import { scheduler } from "timers/promises";
+import { Z_UNKNOWN } from "zlib";
+import { readFileSync, writeFileSync } from "fs";
 
 const abilities = require("../../../../../data/2016/dataSources/Abilities.json"),
   vehicleAbilities = require("../../../../../data/2016/dataSources/VehicleAbilities.json");
@@ -519,30 +521,29 @@ const dev: any = {
       server
     );
 
-    server._npcs[characterId] = zombie;
     server.aiManager.add_entity(zombie, zombie.entityType);
     const a = server.navManager.createAgent(zombie.state.position);
+    if (!a) {
+      return;
+    }
+    server._npcs[zombie.characterId] = zombie;
     zombie.navAgent = a;
-
     await scheduler.wait(5000);
-    let retries = 0;
-    const interval = setInterval(() => {
-      retries++;
-      if (retries > 10) {
-        clearInterval(interval);
-      }
-
-      server.navManager.updt();
+    setInterval(() => {
       if (zombie.navAgent) {
-        zombie.navAgent.requestMoveTarget(
-          server.navManager.getClosestNavPoint(client.character.state.position)
-        );
+        const t = NavManager.gameToBlender(client.character.state.position);
+
+        console.log(t);
         console.log(zombie.navAgent.interpolatedPosition);
+        zombie.navAgent.requestMoveTarget(NavManager.Float32ToVec3(t));
+        console.log("----------");
         zombie.goTo(
-          NavManager.Vec3ToFloat32(zombie.navAgent.interpolatedPosition)
+          NavManager.blenderToGame(
+            NavManager.Vec3ToFloat32(zombie.navAgent.interpolatedPosition)
+          )
         );
       }
-    }, 500);
+    }, 1000);
   },
   abilities: function (
     server: ZoneServer2016,
