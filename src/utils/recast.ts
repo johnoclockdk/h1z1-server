@@ -29,7 +29,7 @@ export class NavManager {
   crowd!: Crowd;
   navMeshQuery!: NavMeshQuery;
   lastTimeCall: number = Date.now();
-  refreshRateMs: number = 200;
+  refreshRateMs: number = 300;
   constructor(public server: ZoneServer2016) {}
   async loadNav() {
     const navData = new Uint8Array(
@@ -39,7 +39,7 @@ export class NavManager {
     const { navMesh } = importNavMesh(navData);
     this.navmesh = navMesh;
     const maxAgents = 1000;
-    const maxAgentRadius = 1;
+    const maxAgentRadius = 10;
 
     this.navMeshQuery = new NavMeshQuery(this.navmesh);
     this.crowd = new Crowd(navMesh, { maxAgents, maxAgentRadius });
@@ -79,7 +79,6 @@ export class NavManager {
   updtCrowdPosition() {
     Object.values(this.server._npcs).forEach((npc) => {
       if (npc.navAgent) {
-        console.log(npc.navAgent.interpolatedPosition);
         npc.goTo(
           NavManager.blenderToGame(
             NavManager.Vec3ToFloat32(npc.navAgent.interpolatedPosition)
@@ -92,9 +91,13 @@ export class NavManager {
     const dt = 1 / 60;
     const maxSubSteps = 10;
 
-    const timeSinceLastFrame = Date.now() - this.lastTimeCall;
+    let timeSinceLastFrame = Date.now() - this.lastTimeCall;
+    if (timeSinceLastFrame > 1000) {
+      timeSinceLastFrame = 1000;
+    }
 
-    this.crowd.update(dt, timeSinceLastFrame, maxSubSteps);
+    // recast want the timeSinceLastFrame to be in sec and a float containing ms
+    this.crowd.update(dt, timeSinceLastFrame / 1000, maxSubSteps);
     this.lastTimeCall = Date.now();
   }
   getClosestNavPoint(pos: Float32Array): Vector3 {

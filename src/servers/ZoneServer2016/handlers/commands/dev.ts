@@ -537,7 +537,7 @@ const dev: any = {
       }
     }, 1000);
   },
-  zombiesAgro: async function (
+  agro: async function (
     server: ZoneServer2016,
     client: Client,
     args: Array<string>

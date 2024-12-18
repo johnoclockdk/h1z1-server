@@ -127,10 +127,10 @@ export class Npc extends BaseFullCharacter {
         break;
     }
     this.h1emu_ai_id = server.aiManager.add_entity(this, this.entityType);
-    // const navAgent = server.navManager.createAgent(this.state.position);
-    // if (navAgent) {
-    //   this.navAgent = navAgent;
-    // }
+    const navAgent = server.navManager.createAgent(this.state.position);
+    if (navAgent) {
+      this.navAgent = navAgent;
+    }
   }
 
   playAnimation(animationName: string) {
