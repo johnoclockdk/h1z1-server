@@ -499,7 +499,7 @@ export class ZoneServer2016 extends EventEmitter {
     this.commandHandler = new CommandHandler();
     this.playTimeManager = new PlayTimeManager();
     this.aiManager = new AiManager();
-    this.navManager = new NavManager();
+    this.navManager = new NavManager(this);
     /* CONFIG MANAGER MUST BE INSTANTIATED LAST ! */
     this.configManager = new ConfigManager(this, process.env.CONFIG_PATH);
     this.enableWorldSaves =
@@ -1855,6 +1855,7 @@ export class ZoneServer2016 extends EventEmitter {
         this.aiManager.run();
       }
     }, 100);
+    this.navManager.start();
   }
 
   async start(): Promise<void> {

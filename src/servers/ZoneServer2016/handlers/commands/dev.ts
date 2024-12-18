@@ -532,18 +532,41 @@ const dev: any = {
     setInterval(() => {
       if (zombie.navAgent) {
         const t = NavManager.gameToBlender(client.character.state.position);
-
-        console.log(t);
-        console.log(zombie.navAgent.interpolatedPosition);
+        zombie.navAgent.resetMoveTarget();
         zombie.navAgent.requestMoveTarget(NavManager.Float32ToVec3(t));
-        console.log("----------");
-        zombie.goTo(
+      }
+    }, 1000);
+  },
+  zombiesAgro: async function (
+    server: ZoneServer2016,
+    client: Client,
+    args: Array<string>
+  ) {
+    Object.values(server._npcs).forEach((npc) => {
+      if (npc.navAgent) {
+        const t = NavManager.gameToBlender(client.character.state.position);
+        npc.navAgent.requestMoveTarget(NavManager.Float32ToVec3(t));
+        npc.goTo(
           NavManager.blenderToGame(
-            NavManager.Vec3ToFloat32(zombie.navAgent.interpolatedPosition)
+            NavManager.Vec3ToFloat32(npc.navAgent.interpolatedPosition)
           )
         );
       }
-    }, 1000);
+    });
+  },
+  zombietome: async function (
+    server: ZoneServer2016,
+    client: Client,
+    args: Array<string>
+  ) {
+    Object.values(server._npcs).forEach((npc) => {
+      if (npc.navAgent) {
+        npc.state.position = client.character.state.position;
+        npc.navAgent?.teleport(
+          NavManager.Float32ToVec3(client.character.state.position)
+        );
+      }
+    });
   },
   abilities: function (
     server: ZoneServer2016,

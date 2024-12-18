@@ -22,13 +22,15 @@ import {
 import { NavMeshQuery } from "recast-navigation";
 import { importNavMesh } from "recast-navigation";
 import { Crowd } from "recast-navigation";
+import { ZoneServer2016 } from "servers/ZoneServer2016/zoneserver";
 
 export class NavManager {
   navmesh!: NavMesh;
   crowd!: Crowd;
   navMeshQuery!: NavMeshQuery;
   lastTimeCall: number = Date.now();
-  constructor() {}
+  refreshRateMs: number = 200;
+  constructor(public server: ZoneServer2016) {}
   async loadNav() {
     const navData = new Uint8Array(
       readFileSync(__dirname + "/../../data/2016/navData/z1.bin")
@@ -36,14 +38,19 @@ export class NavManager {
     await initRecast();
     const { navMesh } = importNavMesh(navData);
     this.navmesh = navMesh;
-    const maxAgents = 100;
-    const maxAgentRadius = 0.6;
+    const maxAgents = 1000;
+    const maxAgentRadius = 1;
 
     this.navMeshQuery = new NavMeshQuery(this.navmesh);
     this.crowd = new Crowd(navMesh, { maxAgents, maxAgentRadius });
+  }
+  start() {
     setInterval(() => {
-      this.updt();
-    }, 250);
+      console.time("nav");
+      this.updtCrowd();
+      this.updtCrowdPosition();
+      console.timeEnd("nav");
+    }, this.refreshRateMs);
   }
   // Convert Blender coordinates to Game coordinates
   static blenderToGame(f: Float32Array): Float32Array {
@@ -69,7 +76,19 @@ export class NavManager {
   static Vec3ToFloat32(v: Vector3): Float32Array {
     return new Float32Array([v.x, v.y, v.z]);
   }
-  updt() {
+  updtCrowdPosition() {
+    Object.values(this.server._npcs).forEach((npc) => {
+      if (npc.navAgent) {
+        console.log(npc.navAgent.interpolatedPosition);
+        npc.goTo(
+          NavManager.blenderToGame(
+            NavManager.Vec3ToFloat32(npc.navAgent.interpolatedPosition)
+          )
+        );
+      }
+    });
+  }
+  updtCrowd() {
     const dt = 1 / 60;
     const maxSubSteps = 10;
 
@@ -85,7 +104,7 @@ export class NavManager {
   createAgent(pos: Float32Array): CrowdAgent | null {
     pos = NavManager.gameToBlender(pos);
     const position = this.getClosestNavPoint(pos);
-    const radius = 5.5;
+    const radius = 0.5;
 
     const {
       randomPoint: initialAgentPosition,
@@ -99,32 +118,14 @@ export class NavManager {
     }
 
     const agent = this.crowd.addAgent(initialAgentPosition, {
-      radius: 1,
-      height: 4,
-      maxAcceleration: 8.0,
-      maxSpeed: 2.0,
+      radius: 0.5,
+      height: 10,
+      maxAcceleration: 20.0,
+      maxSpeed: 6.0,
       collisionQueryRange: 0.1,
       pathOptimizationRange: 0.0,
       separationWeight: 0
     });
     return agent;
-  }
-  testNavMesh(a: Float32Array, b: Float32Array): Float32Array[] {
-    console.time("calculating path");
-
-    const start = NavManager.Float32ToVec3(a);
-    const end = NavManager.Float32ToVec3(b);
-    const { success, error, path } = this.navMeshQuery.computePath(start, end);
-    console.log(success);
-    console.log(error);
-    console.log(path);
-    console.timeEnd("calculating path");
-    const pathNodes: Float32Array[] = [];
-    if (path) {
-      path.forEach((v) => {
-        pathNodes.push(new Float32Array([v.x, v.y, v.z]));
-      });
-    }
-    return pathNodes;
   }
 }

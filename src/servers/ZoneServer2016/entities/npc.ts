@@ -34,6 +34,7 @@ import {
 } from "../models/enums";
 import { CommandInteractionString } from "types/zone2016packets";
 import { EntityType } from "h1emu-ai";
+import { NavManager } from "../../../utils/recast";
 
 export class Npc extends BaseFullCharacter {
   health: number;
@@ -126,6 +127,10 @@ export class Npc extends BaseFullCharacter {
         break;
     }
     this.h1emu_ai_id = server.aiManager.add_entity(this, this.entityType);
+    // const navAgent = server.navManager.createAgent(this.state.position);
+    // if (navAgent) {
+    //   this.navAgent = navAgent;
+    // }
   }
 
   playAnimation(animationName: string) {
@@ -511,11 +516,11 @@ export class Npc extends BaseFullCharacter {
         unknown3_int8: 0,
         stance: 66565,
         engineRPM: 0,
-        orientation: angleInRadians2,
+        orientation: 0,
         frontTilt: 0,
         sideTilt: 0,
         angleChange: 0,
-        verticalSpeed: angleInRadians,
+        verticalSpeed: 0,
         horizontalSpeed: 0.5
       }
     });
